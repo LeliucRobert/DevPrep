@@ -6,9 +6,8 @@ import api from "../api";
 import NavBar from "../components/NavBar";
 import { AuthContext } from "../contexts/AuthContext";
 function Home() {
-  const { isAuthorized, username } = useContext(AuthContext);
-
-  return <NavBar username={username} isAuthorized={isAuthorized} />;
+  // const { isAuthorized, username } = useContext(AuthContext);
+  // return <NavBar username={username} isAuthorized={isAuthorized} />;
 }
 
 export default Home;

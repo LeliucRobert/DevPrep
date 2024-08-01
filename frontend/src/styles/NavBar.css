@@ -1,3 +1,24 @@
-.custom-navbar {
-  background-color: blue;
+/* navbarStyles.css */
+.navbar-custom {
+  height: 70px; /* Fixed height */
+  font-size: 1.2rem; /* Increase font size */
+  background-color: #131842;
+}
+
+.navbar-custom .navbar-brand {
+  font-size: 1.5rem; /* Larger brand text */
+}
+
+.navbar-custom .nav-link {
+  font-size: 1.2rem; /* Larger navigation links */
+}
+
+.navbar-custom .navbar-text {
+  font-size: 1.2rem; /* Larger navbar text */
+}
+
+.navbar-custom .btn {
+  font-size: 1.1rem; /* Button text size */
+  padding: 0.5rem 1rem; /* Increase button padding */
+  margin-left: 0.5rem;
 }

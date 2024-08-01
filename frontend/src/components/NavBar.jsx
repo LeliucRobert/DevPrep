@@ -4,9 +4,13 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "react-bootstrap/Button";
 import ModalForm from "../components/ModalForm";
-import { useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 
 function NavBar({ username, isAuthorized }) {
+  const { logout } = useContext(AuthContext);
+
   const [showModalLogin, setShowModalLogin] = useState(false);
   const [showModalRegister, setShowModalRegister] = useState(false);
 
@@ -18,15 +22,25 @@ function NavBar({ username, isAuthorized }) {
     setShowModalRegister(false);
   };
 
+  const handleLogout = (e) => {
+    logout();
+  };
+
   return (
     <>
-      <Navbar bg="dark" data-bs-theme="dark">
+      <Navbar bg="dark" data-bs-theme="dark" className="navbar-custom">
         <Container>
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/">
+            Navbar
+          </Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <Nav.Link as={Link} to="/learn">
+              Learn
+            </Nav.Link>
+            <Nav.Link as={Link} to="/problems">
+              Solve Problems
+            </Nav.Link>
+            <Nav.Link href="/interviews">Mock Interviews</Nav.Link>
           </Nav>
           <Navbar.Collapse className="justify-content-end">
             {isAuthorized ? (
@@ -38,7 +52,9 @@ function NavBar({ username, isAuthorized }) {
                   menuVariant="dark"
                 >
                   <NavDropdown.Divider />
-                  <NavDropdown.Item href="/logout">Log Out</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleLogout}>
+                    Log Out
+                  </NavDropdown.Item>
                 </NavDropdown>
               </Navbar.Text>
             ) : (

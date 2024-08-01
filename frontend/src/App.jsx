@@ -6,36 +6,37 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
+import Learn from "./pages/Learn";
+import Layout from "./pages/Layout";
+// function Logout() {
+//   localStorage.clear();
+//   return <Navigate to="/" />;
+// }
 
-function Logout() {
-  localStorage.clear();
-  return <Navigate to="/" />;
-}
-
-function RegisterAndLogout() {
-  localStorage.clear();
-  return <Register />;
-}
+// function RegisterAndLogout() {
+//   localStorage.clear();
+//   return <Register />;
+// }
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              // <ProtectedRoute>
-              <Home />
-              // </ProtectedRoute>
-            }
-          />
-
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/logout" element={<Logout />}></Route>
-          <Route path="/register" element={<RegisterAndLogout />}></Route>
-          <Route path="/*" element={<NotFound />}></Route>
-        </Routes>
+        <Layout>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                // <ProtectedRoute>
+                <Home />
+                // </ProtectedRoute>
+              }
+            />
+            <Route path="/learn" element={<Learn />}></Route>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/*" element={<NotFound />}></Route>
+          </Routes>
+        </Layout>
       </BrowserRouter>
     </AuthProvider>
   );
