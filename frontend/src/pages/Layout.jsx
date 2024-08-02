@@ -8,8 +8,8 @@ const Layout = ({ children }) => {
   const { isAuthorized, username } = useContext(AuthContext);
   return (
     <div>
-      <NavBar username={username} isAuthorized={isAuthorized} />;
-      <main className="main-container">{children}</main>
+      <NavBar username={username} isAuthorized={isAuthorized} />
+      <main>{children}</main>
     </div>
   );
 };

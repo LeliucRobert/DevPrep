@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import ModalForm from "../components/ModalForm";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function NavBar({ username, isAuthorized }) {
   const { logout } = useContext(AuthContext);
@@ -26,21 +26,43 @@ function NavBar({ username, isAuthorized }) {
     logout();
   };
 
+  const location = useLocation();
   return (
     <>
-      <Navbar bg="dark" data-bs-theme="dark" className="navbar-custom">
+      {/* <Navbar bg="dark" data-bs-theme="dark" className="navbar-custom"> */}
+      <Navbar data-bs-theme="dark" className="navbar-custom fixed-top">
         <Container>
           <Navbar.Brand as={Link} to="/">
-            Navbar
+            PrepIt
           </Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/learn">
+            <Nav.Link
+              as={Link}
+              to="/learn"
+              className={`nav-link-custom ${
+                location.pathname === "/learn" ? "nav-link-active" : ""
+              }`}
+            >
               Learn
             </Nav.Link>
-            <Nav.Link as={Link} to="/problems">
+            <Nav.Link
+              as={Link}
+              to="/problems"
+              className={`nav-link-custom ${
+                location.pathname === "/problems" ? "nav-link-active" : ""
+              }`}
+            >
               Solve Problems
             </Nav.Link>
-            <Nav.Link href="/interviews">Mock Interviews</Nav.Link>
+            <Nav.Link
+              as={Link}
+              to="/interviews"
+              className={`nav-link-custom ${
+                location.pathname === "/interviews" ? "nav-link-active" : ""
+              }`}
+            >
+              Mock Interviews
+            </Nav.Link>
           </Nav>
           <Navbar.Collapse className="justify-content-end">
             {isAuthorized ? (

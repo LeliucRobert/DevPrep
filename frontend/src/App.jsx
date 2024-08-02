@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 import Learn from "./pages/Learn";
 import Layout from "./pages/Layout";
+import "./styles/index.css";
 // function Logout() {
 //   localStorage.clear();
 //   return <Navigate to="/" />;

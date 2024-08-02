@@ -1,24 +1,32 @@
-/* navbarStyles.css */
+@import "./Colors.css";
+
 .navbar-custom {
   height: 70px; /* Fixed height */
-  font-size: 1.2rem; /* Increase font size */
-  background-color: #131842;
+  font-size: 1rem; /* Increase font size */
+  background-color: #17153b;
+  /* background-color: #ffffff25;
+  border: 1px #000;
+  border-radius: 0 0 4vmax 4vmax;
+  padding: 1rem 2rem;
+  box-shadow: inset 0 0 15px #000;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  margin-left: 100px;
+  margin-right: 100px;
+  padding: 0.3vmax 4vmax;
+  transition: all 0.5s;
+  width: auto; */
 }
 
-.navbar-custom .navbar-brand {
-  font-size: 1.5rem; /* Larger brand text */
+.navbar-custom .nav-link-custom {
+  /* color: black !important;  */
+  font-weight: 600px;
 }
 
-.navbar-custom .nav-link {
-  font-size: 1.2rem; /* Larger navigation links */
+.navbar-custom .nav-link-custom:hover {
+  color: white !important; /* Change this to your desired hover color */
 }
 
-.navbar-custom .navbar-text {
-  font-size: 1.2rem; /* Larger navbar text */
-}
-
-.navbar-custom .btn {
-  font-size: 1.1rem; /* Button text size */
-  padding: 0.5rem 1rem; /* Increase button padding */
-  margin-left: 0.5rem;
+.navbar-custom .nav-link-active {
+  color: white !important; /* Active link color */
 }

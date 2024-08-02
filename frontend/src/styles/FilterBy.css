@@ -1,0 +1,16 @@
+.filter-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; /* Add some spacing between elements */
+  padding: 10px;
+}
+
+.filter-button .form-check {
+  display: flex;
+  align-items: center; /* Align items vertically center within each checkbox */
+}
+
+.filter-button .form-check-label {
+  margin-left: 8px; /* Adjust spacing between checkbox and label */
+}
