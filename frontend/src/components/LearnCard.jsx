@@ -7,8 +7,15 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
+import { useEffect, useState } from "react";
+const LearnCard = ({ title, text, level, isAuthorized, score }) => {
+  const [progress, setProgress] = useState(0);
 
-const LearnCard = ({ title, text, level, isAuthorized }) => {
+  useEffect(() => {
+    const timeout = setTimeout(() => setProgress(score), 200);
+    return () => clearTimeout(timeout);
+  }, [score]);
+
   return (
     <Card border="secondary" className="mb-3">
       <Card.Header as="h5" className="learn-card-header">
@@ -33,7 +40,11 @@ const LearnCard = ({ title, text, level, isAuthorized }) => {
         <Card.Text>{text}</Card.Text>
         <Row className="mb-4">
           <Col>
-            <ProgressBar now={50} label="50%" />
+            {isAuthorized ? (
+              <ProgressBar now={progress} label={`${progress}%`} animated />
+            ) : (
+              <ProgressBar now="0" label="0" animated />
+            )}
           </Col>
         </Row>
 
