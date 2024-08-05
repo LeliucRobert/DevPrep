@@ -7,9 +7,15 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 const LearnCard = ({ title, text, level, isAuthorized, score }) => {
   const [progress, setProgress] = useState(0);
+  const navigate = useNavigate();
+
+  const handleStartLesson = () => {
+    navigate(`/learn/${encodeURIComponent(title)}`);
+  };
 
   useEffect(() => {
     const timeout = setTimeout(() => setProgress(score), 200);
@@ -51,7 +57,11 @@ const LearnCard = ({ title, text, level, isAuthorized, score }) => {
         <Row>
           <Col>
             {isAuthorized ? (
-              <Button variant="primary" className="w-100">
+              <Button
+                variant="primary"
+                className="w-100"
+                onClick={handleStartLesson}
+              >
                 Start Lesson
               </Button>
             ) : (

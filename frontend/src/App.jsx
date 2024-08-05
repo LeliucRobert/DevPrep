@@ -9,6 +9,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Learn from "./pages/Learn";
 import Layout from "./pages/Layout";
 import "./styles/index.css";
+import LessonPage from "./pages/LessonPage";
 // function Logout() {
 //   localStorage.clear();
 //   return <Navigate to="/" />;
@@ -34,6 +35,7 @@ function App() {
               }
             />
             <Route path="/learn" element={<Learn />}></Route>
+            <Route path="/learn/:title" element={<LessonPage />} />
             <Route path="/login" element={<Login />}></Route>
             <Route path="/*" element={<NotFound />}></Route>
           </Routes>
