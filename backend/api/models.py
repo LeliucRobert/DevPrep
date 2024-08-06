@@ -23,6 +23,38 @@ class Lesson(models.Model):
     def __str__(self):
         return self.title
 
+class Topic(models.Model):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    status = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+class Quiz(models.Model):
+    topic = models.OneToOneField(Topic, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
+
+class Question(models.Model):
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    question = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.question
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.CharField(max_length=255)
+    is_correct = models.BooleanField(default=False)
+
+    def __str__(self): 
+        return self.answer
+
 class UserLessonScore(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)

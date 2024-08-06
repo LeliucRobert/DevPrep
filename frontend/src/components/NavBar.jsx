@@ -7,7 +7,7 @@ import ModalForm from "../components/ModalForm";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 function NavBar({ username, isAuthorized }) {
   const { logout } = useContext(AuthContext);
 
@@ -24,6 +24,12 @@ function NavBar({ username, isAuthorized }) {
 
   const handleLogout = (e) => {
     logout();
+  };
+
+  const navigate = useNavigate();
+
+  const handleViewProfile = () => {
+    navigate(`/profile/${username}`);
   };
 
   const location = useLocation();
@@ -73,6 +79,9 @@ function NavBar({ username, isAuthorized }) {
                   title={username}
                   menuVariant="dark"
                 >
+                  <NavDropdown.Item onClick={handleViewProfile}>
+                    View Profile
+                  </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={handleLogout}>
                     Log Out

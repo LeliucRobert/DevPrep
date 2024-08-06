@@ -10,15 +10,7 @@ import Learn from "./pages/Learn";
 import Layout from "./pages/Layout";
 import "./styles/index.css";
 import LessonPage from "./pages/LessonPage";
-// function Logout() {
-//   localStorage.clear();
-//   return <Navigate to="/" />;
-// }
-
-// function RegisterAndLogout() {
-//   localStorage.clear();
-//   return <Register />;
-// }
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -34,6 +26,7 @@ function App() {
                 // </ProtectedRoute>
               }
             />
+            <Route path="/profile/:username" element={<Profile />}></Route>
             <Route path="/learn" element={<Learn />}></Route>
             <Route path="/learn/:title" element={<LessonPage />} />
             <Route path="/login" element={<Login />}></Route>
