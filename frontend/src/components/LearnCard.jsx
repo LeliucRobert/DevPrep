@@ -9,12 +9,12 @@ import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-const LearnCard = ({ title, text, level, isAuthorized, score }) => {
+const LearnCard = ({ title, text, level, isAuthorized, score, lessonId }) => {
   const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
 
   const handleStartLesson = () => {
-    navigate(`/learn/${encodeURIComponent(title)}`);
+    navigate(`/learn/${encodeURIComponent(title)}`, { state: { lessonId } });
   };
 
   useEffect(() => {

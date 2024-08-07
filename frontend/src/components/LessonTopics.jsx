@@ -1,75 +1,73 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { useState, useEffect } from "react";
-import ModalLesson from "./ModalLesson";
-import ModalQuiz from "./ModalQuiz";
+import React, { useEffect } from "react";
+import { useState } from "react";
+import api from "../api";
+import Pagination from "react-bootstrap/Pagination";
+import LessonTopicCard from "./LessonTopicCard";
 
-const LessonTopics = ({ initialStatus }) => {
-  const [status, setStatus] = useState(initialStatus);
-  const [showLesson, setShowLesson] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
-
+const LessonTopics = ({ lesson_id }) => {
+  const [topics, setTopics] = useState([]);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setStatus(initialStatus);
-  }, [initialStatus]);
+    const fetchData = async () => {
+      try {
+        const response = await api.get(`api/lessons/${lesson_id}/topics/`);
+        const topicsData = response.data;
+        setLoading(false);
+        setTopics(topicsData);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const handleStatusChange = () => {
-    setStatus(status === "Completed" ? "Not Completed" : "Completed");
+  const [currentPage, setCurrentPage] = useState(1);
+  const cardsPerPage = 4;
+  const indexOfLastCard = currentPage * cardsPerPage;
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
+
+  const currentCards = topics.slice(indexOfFirstCard, indexOfLastCard);
+
+  const totalPages = Math.ceil(topics.length / cardsPerPage);
+
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  const renderPaginationItems = () => {
+    let items = [];
+    for (let number = 1; number <= totalPages; number++) {
+      items.push(
+        <Pagination.Item
+          key={number}
+          active={number === currentPage}
+          onClick={() => handlePageChange(number)}
+        >
+          {number}
+        </Pagination.Item>
+      );
+    }
+    return items;
   };
 
-  const cardStyle =
-    status === "Completed"
-      ? { backgroundColor: "#90EE90", color: "black" }
-      : { backgroundColor: "#FFA07A", color: "black" };
-
-  const handleShowLesson = () => {
-    setShowLesson(true);
-  };
-
-  const handleShowQuiz = () => {
-    setShowQuiz(true);
-  };
-
-  const handleCloseLesson = () => {
-    setShowLesson(false);
-  };
-
-  const handleCloseQuiz = () => {
-    setShowQuiz(false);
-  };
+  if (loading) {
+    return <p>Loading quiz data...</p>; // Render loading message while data is being fetched
+  }
 
   return (
     <>
-      <Card style={cardStyle}>
-        <Card.Body>
-          <Row>
-            <Col>
-              <Card.Title>Special title treatment</Card.Title>
-            </Col>
-            <Col lg="1" xs="3">
-              <Button variant="primary" onClick={handleShowLesson}>
-                View
-              </Button>
-            </Col>
-            <Col lg="2" xs="6">
-              <Button variant="primary" onClick={handleShowQuiz}>
-                Start Quiz
-              </Button>
-            </Col>
-            {/* <Col lg="1" xs="3">
-            <Button variant="primary">Reset</Button>
-          </Col> */}
-          </Row>
-          <Row>
-            <Col>Status: {status}</Col>
-          </Row>
-        </Card.Body>
-      </Card>
-      <ModalLesson show={showLesson} handleClose={handleCloseLesson} />
-      <ModalQuiz show={showQuiz} handleClose={handleCloseQuiz} />
+      {currentCards.map((topics, index) => (
+        <LessonTopicCard
+          key={index}
+          topicId={topics.id}
+          topicContent={topics.content}
+        />
+      ))}
+
+      <Pagination className="justify-content-center">
+        {renderPaginationItems()}
+      </Pagination>
     </>
   );
 };

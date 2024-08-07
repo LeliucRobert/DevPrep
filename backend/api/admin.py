@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Lesson, UserLessonScore, Topic, Quiz, Question, Answer
+from .models import Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus
 # Register your models here.
 
 admin.site.register(Lesson)
@@ -8,3 +8,4 @@ admin.site.register(Topic)
 admin.site.register(Quiz)
 admin.site.register(Question)
 admin.site.register(Answer)
+admin.site.register(UserTopicStatus)

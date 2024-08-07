@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Note, Lesson, UserLessonScore, Quiz, Question, Answer, Topic
+from .models import Note, Lesson, UserLessonScore, Quiz, Question, Answer, Topic, UserTopicStatus
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,3 +52,8 @@ class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = ["id" , "question" , "answer" , "is_correct"]
+
+class UserTopicStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserTopicStatus
+        fields = ["id" , "user" , "topic", "quizScore", "completed_at"]

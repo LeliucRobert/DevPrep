@@ -15,6 +15,7 @@ const Lessons = ({ isAuthorized }) => {
         const [lessonsData, scoresData] = await Promise.all([
           getAllLessons(),
           getUserScores(),
+          setLoading(false),
         ]);
         setLessons(lessonsData);
         setScores(scoresData);
@@ -54,17 +55,6 @@ const Lessons = ({ isAuthorized }) => {
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
 
-  //   const cards = [
-  //     { title: "Card 3", text: "Content for card 1", level: "Easy" },
-  //     { title: "Card 2", text: "Content for card 2", level: "Medium" },
-  //     { title: "Card 3", text: "Content for card 3", level: "Hard" },
-  //     { title: "Card 4", text: "Content for card 4", level: "Hard" },
-  //     { title: "Card 5", text: "Content for card 5", level: "Medium" },
-  //     { title: "Card 6", text: "Content for card 6", level: "Hard" },
-  //     { title: "Card 7", text: "Content for card 7", level: "Easy" },
-  //   ];
-
-  //   console.log(lessons);
   const currentCards = lessons.slice(indexOfFirstCard, indexOfLastCard);
 
   const totalPages = Math.ceil(lessons.length / cardsPerPage);
@@ -86,14 +76,11 @@ const Lessons = ({ isAuthorized }) => {
     }
     return items;
   };
-  console.log(scores);
-  console.log(lessons);
 
   const lessonScoreMap = scores.reduce((acc, score) => {
     acc[score.lesson] = score.score;
     return acc;
   }, {});
-
   return (
     <>
       {currentCards.map((lessons, index) => (
@@ -104,6 +91,7 @@ const Lessons = ({ isAuthorized }) => {
           level={lessons.difficulty}
           isAuthorized={isAuthorized}
           score={lessonScoreMap[lessons.title] || "0"}
+          lessonId={lessons.id}
         />
       ))}
       <Pagination className="justify-content-center">

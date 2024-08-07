@@ -4,10 +4,16 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "../styles/LessonPage.css";
 import Button from "react-bootstrap/Button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import LessonTopicCard from "../components/LessonTopicCard";
 import LessonTopics from "../components/LessonTopics";
+
 const LessonPage = () => {
   const { title } = useParams();
+
+  const location = useLocation();
+
+  const { lessonId } = location.state;
 
   const navigate = useNavigate();
 
@@ -40,11 +46,7 @@ const LessonPage = () => {
       <Row>
         <Col lg="2"></Col>
         <Col>
-          <LessonTopics initialStatus="Completed" />
-          <LessonTopics initialStatus="Completed" />
-          <LessonTopics initialStatus="Uncompleted" />
-          <LessonTopics initialStatus="Completed" />
-          <LessonTopics initialStatus="Uncompleted" />
+          <LessonTopics lesson_id={lessonId} />
         </Col>
         <Col lg="2"></Col>
       </Row>
