@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
-import LearnCard from "../components/LearnCard";
+import LearnCard from "../components/Learn/LearnCard";
 import "../styles/Learn.css";
 import Pagination from "react-bootstrap/Pagination";
 import { AuthContext } from "../contexts/AuthContext";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import FilterBy from "../components/FilterBy";
-import SortBy from "../components/SortBy";
+import FilterBy from "../components/Utils/FilterBy";
+import SortBy from "../components/Utils/SortBy";
 import api from "../api";
-import Lessons from "../components/Lessons";
+import Lessons from "../components/Learn/Lessons";
 
 const Learn = () => {
   const { isAuthorized } = useContext(AuthContext);

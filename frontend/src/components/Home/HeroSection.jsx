@@ -1,17 +1,18 @@
 import React from "react";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import "../styles/HeroSection.css";
-
-import "../styles/AboutInterviewSection.css";
+import "../../styles/HeroSection.css";
 import Button from "react-bootstrap/Button";
 
-const AboutInterviewsSection = () => {
+const HeroSection = () => {
   return (
     <Row className="hero-row">
       <Col className="hero-col">
         <div className="hero-sitename"></div>
-        <span className="hero-title"> Practice Mock Interviews </span>
+        <span className="hero-title">
+          {" "}
+          Ace your Interviews and Master Problem Solving{" "}
+        </span>
         <p className="hero-description">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi ut
           neque suscipit doloribus repellat est reiciendis necessitatibus,
@@ -19,18 +20,14 @@ const AboutInterviewsSection = () => {
           assumenda. Aliquam, error.
         </p>
         <Button variant="info" className="hero-button">
-          Practice Now
+          Get Started
         </Button>{" "}
       </Col>
       <Col className="hero-col">
-        <img
-          src="public/images/aboutinterview1.png"
-          alt=""
-          className="hero-img"
-        />
+        <img src="public/images/hero2.png" alt="" className="hero-img" />
       </Col>
     </Row>
   );
 };
 
-export default AboutInterviewsSection;
+export default HeroSection;

@@ -5,8 +5,8 @@ import Col from "react-bootstrap/Col";
 import "../styles/LessonPage.css";
 import Button from "react-bootstrap/Button";
 import { useLocation, useNavigate } from "react-router-dom";
-import LessonTopicCard from "../components/LessonTopicCard";
-import LessonTopics from "../components/LessonTopics";
+import LessonTopicCard from "../components/Learn/Topics/LessonTopicCard";
+import LessonTopics from "../components/Learn/Topics/LessonTopics";
 
 const LessonPage = () => {
   const { title } = useParams();

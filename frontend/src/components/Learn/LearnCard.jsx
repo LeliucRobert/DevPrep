@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
-import "../styles/LearnCard.css";
+import "../../styles/LearnCard.css";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";

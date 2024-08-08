@@ -2,12 +2,12 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 import { useContext, useState } from "react";
-import api from "../api";
-import { AuthContext } from "../contexts/AuthContext";
+import api from "../../api";
+import { AuthContext } from "../../contexts/AuthContext";
 import Spinner from "react-bootstrap/Spinner";
-import "../styles/ModalForm.css";
+import "../../styles/ModalForm.css";
 
 function ModalForm({ show, handleClose, login, route }) {
   const title = login ? "Log In" : "Register";

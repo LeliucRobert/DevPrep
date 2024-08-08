@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import api from "../api";
+import api from "../../../api";
 import Pagination from "react-bootstrap/Pagination";
 import LessonTopicCard from "./LessonTopicCard";
 

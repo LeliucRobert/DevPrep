@@ -10,27 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib import admin
-class NoteListCreate(generics.ListCreateAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Note.objects.filter(author=user)
-    
-    def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(author=self.request.user)
-        else:
-            print(serializer.errors)
-
-class NoteDelete(generics.DestroyAPIView):
-    serializer_class = NoteSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        return Note.objects.filter(author=user)
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -38,7 +18,7 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_lesson(request):
     serializer = LessonSerializer(data=request.data)
     if serializer.is_valid():
@@ -64,7 +44,7 @@ def get_lesson_details(request, pk):
         return Response({'error': 'Lesson not found'}, status=404)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_topic(request):
     serializer = TopicSerializer(data=request.data)
     if serializer.is_valid():
@@ -73,7 +53,7 @@ def create_topic(request):
     return Response(serializer.errors, status=400)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_topics(request, lesson_id):
     try:
         topics = Topic.objects.filter(lesson=lesson_id)
@@ -83,7 +63,7 @@ def get_topics(request, lesson_id):
         return Response({'error': 'Lesson not found'}, status=404)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_quiz(request):
     serializer = QuizSerializer(data=request.data)
     if serializer.is_valid():
@@ -92,7 +72,7 @@ def create_quiz(request):
     return Response(serializer.errors, status=400)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_quiz(request, topic_id):
     try:
         quiz = Quiz.objects.filter(topic=topic_id)
@@ -102,7 +82,7 @@ def get_quiz(request, topic_id):
         return Response({'error': 'Topic not found'}, status=404)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_question(request):
     serializer = QuestionSerializer(data=request.data)
     if serializer.is_valid():
@@ -122,7 +102,7 @@ def get_question(request, quiz_id):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def create_answer(request):
     serializer = AnswerSerializer(data=request.data)
     if serializer.is_valid():
@@ -131,7 +111,7 @@ def create_answer(request):
     return Response(serializer.errors, status=400)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_answer(request, question_id):
     try:
         answers = Answer.objects.filter(question=question_id)
@@ -141,7 +121,7 @@ def get_answer(request, question_id):
         return Response({'error': 'Question not found'}, status=404)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_user_scores(request):
     user = request.user  # Get the authenticated user
     scores = UserLessonScore.objects.filter(user=user)  # Filter scores for this user
@@ -150,7 +130,7 @@ def get_user_scores(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_user_details(request, user_id):
     try:
         user = User.objects.get(pk=user_id)

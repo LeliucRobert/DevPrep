@@ -3,7 +3,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "../styles/FilterBy.css";
+import "../../styles/FilterBy.css";
 import DropdownDivider from "react-bootstrap/esm/DropdownDivider";
 
 const FilterBy = ({ type, options }) => {

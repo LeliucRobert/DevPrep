@@ -4,8 +4,6 @@ from .views import get_user_topic_status
 from . import views
 
 urlpatterns =[
-    path("notes/", views.NoteListCreate.as_view(), name="note-list-create"),
-    path("notes/delete/<int:pk>/", views.NoteDelete.as_view(), name="note-delete"),
     path("lessons/create", create_lesson , name="lessons-list-create"),
     path("lessons/" , get_all_lessons , name="lessons-list"),
     path("lessons/<int:pk>/" , get_lesson_details , name="lesson-detail"),

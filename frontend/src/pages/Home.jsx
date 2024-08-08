@@ -3,11 +3,11 @@ import { useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
 import api from "../api";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBar/NavBar";
 import { AuthContext } from "../contexts/AuthContext";
-import HeroSection from "../components/HeroSection";
-import AboutLearnSection from "../components/AboutLearnSection";
-import AboutInterviewSection from "../components/AboutInterviewsSection";
+import HeroSection from "../components/Home/HeroSection";
+import AboutLearnSection from "../components/Home/AboutLearnSection";
+import AboutInterviewSection from "../components/Home/AboutInterviewsSection";
 function Home() {
   // const { isAuthorized, username } = useContext(AuthContext);
   // return <NavBar username={username} isAuthorized={isAuthorized} />;
