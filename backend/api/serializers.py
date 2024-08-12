@@ -35,7 +35,7 @@ class TopicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Topic
-        fields = ["id" , "lesson" , "title" , "status" , "completed_at" , "content"]
+        fields = ["id" , "lesson" , "title"  , "completed_at" , "content"]
 
 class QuizSerializer(serializers.ModelSerializer):
     
@@ -46,7 +46,7 @@ class QuizSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ["id" , "quiz" , "question"]
+        fields = ["id" , "quiz" , "question" , "correct_answers" , "weight"]
 
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:

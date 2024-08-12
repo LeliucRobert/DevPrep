@@ -86,23 +86,56 @@ const Quiz = ({ topicId, onFinish }) => {
   };
 
   const handlePrev = () => {
-    const prevIndex = index === 0 ? 1 : index - 1;
+    const prevIndex = index - 1;
     setIndex(prevIndex);
   };
 
   const handleNext = () => {
-    const nextIndex = index === 1 ? 0 : index + 1;
+    const nextIndex = index + 1;
     setIndex(nextIndex);
   };
   const showToast = useToast();
 
+  const calculateResult = () => {
+    let totalPoints = 0;
+
+    for (let i = 0; i < questions.length; i++) {
+      const questionPoints = questions[i].weight;
+      const noCorrectAnswers = questions[i].correct_answers;
+      let userPoints = 0;
+      console.log(noCorrectAnswers);
+      if (selectedAnswers[i]) {
+        selectedAnswers[i].forEach((answer) => {
+          if (answer.is_correct) {
+            userPoints += questionPoints / noCorrectAnswers;
+          } else {
+            userPoints -= (0.66 * questionPoints) / noCorrectAnswers;
+          }
+          console.log(answer.is_correct);
+        });
+      }
+
+      userPoints = Math.max(0, userPoints);
+      userPoints = Math.min(questionPoints, userPoints);
+
+      totalPoints += userPoints;
+    }
+    console.log(totalPoints);
+    return totalPoints;
+  };
   const confirmFinish = () => {
     confirmDialog({
       message: "Are you sure you want to finish?",
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
-        showToast("info", "Confirmed", "You have finished", 3000);
+        const result = calculateResult(selectedAnswers);
+        showToast(
+          "info",
+          "Confirmed",
+          `You have finished. Your score is ${100 * result}%`,
+          3000
+        );
         onFinish();
       },
       reject: () => {
@@ -110,6 +143,7 @@ const Quiz = ({ topicId, onFinish }) => {
       },
     });
   };
+
   return (
     <>
       <ConfirmDialog />
@@ -124,30 +158,30 @@ const Quiz = ({ topicId, onFinish }) => {
           {!loading &&
             questions.map((question) => (
               <Carousel.Item key={question.id}>
-                <div
-                  className="d-flex flex-column align-items-center"
-                  style={{ height: "100px" }}
-                >
-                  <h3>Question: {question.question}</h3>
+                <Row className="mt-3">
+                  <Col lg="9" className="mx-auto text-center">
+                    <h3>Question: {question.question}</h3>
+                  </Col>
                   <div className="learn-divider"></div>
-                </div>
-                <div
-                  className="d-flex flex-column align-items-center justify-content-center"
-                  style={{ flex: 1 }}
-                >
-                  <ListBox
-                    multiple
-                    value={selectedAnswers[question.id] || []}
-                    onChange={(e) => handleAnswerChange(question.id, e.value)}
-                    options={answers[question.id - 1]}
-                    optionLabel="answer" // Adjust based on the actual field name in your answers array
-                    className="w-full md:w-14rem"
-                  />
-                </div>
+                </Row>
+                <Row className="mt-5">
+                  <Col lg="6" className="mx-auto">
+                    <ListBox
+                      multiple
+                      value={selectedAnswers[question.id - 1] || []}
+                      onChange={(e) =>
+                        handleAnswerChange(question.id - 1, e.value)
+                      }
+                      options={answers[question.id - 1]}
+                      optionLabel="answer"
+                      className="w-full md:w-14rem"
+                    />
+                  </Col>
+                </Row>
               </Carousel.Item>
             ))}
         </Carousel>
-        <Row className="mt-3 justify-content-between">
+        <Row className="mt-5 justify-content-between">
           <Col className="text-center d-flex justify-content-center"></Col>
         </Row>
         <Row>
@@ -164,11 +198,11 @@ const Quiz = ({ topicId, onFinish }) => {
             </Button>
           </Col>
           <Col className="text-right d-flex justify-content-end">
-            {index === 1 ? (
+            {index === questions.length - 1 ? (
               <Button
                 variant="primary"
                 onClick={confirmFinish}
-                hidden={index !== 1}
+                hidden={index !== questions.length - 1}
               >
                 Finish
               </Button>
@@ -176,7 +210,7 @@ const Quiz = ({ topicId, onFinish }) => {
               <Button
                 variant="primary"
                 onClick={handleNext}
-                hidden={index === 1}
+                hidden={index === questions.length - 1}
               >
                 Next
               </Button>

@@ -8,9 +8,31 @@ import ModalLesson from "./View/ModalLesson";
 import ModalQuiz from "./Quiz/ModalQuiz";
 import api from "../../../api";
 const LessonTopicCard = ({ initialStatus, topicId, topicContent }) => {
-  const [status, setStatus] = useState(initialStatus);
+  const [status, setStatus] = useState("Not Completed");
   const [showLesson, setShowLesson] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [quizScore, setQuizScore] = useState(0);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get(`api/topics/${topicId}/userScores/`);
+
+        const topicsData = response.data;
+        if (topicsData.length > 0) {
+          setQuizScore(topicsData[0].quizScore);
+
+          console.log(topicsData[0].quizScore);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleStatusChange = () => {
     setStatus(status === "Completed" ? "Not Completed" : "Completed");
@@ -37,6 +59,12 @@ const LessonTopicCard = ({ initialStatus, topicId, topicContent }) => {
     setShowQuiz(false);
   };
 
+  useEffect(() => {
+    if (!loading && quizScore > 0) {
+      setStatus("Completed");
+    }
+  }, [loading, quizScore]);
+
   return (
     <>
       <Card style={cardStyle}>
@@ -56,8 +84,12 @@ const LessonTopicCard = ({ initialStatus, topicId, topicContent }) => {
               </Button>
             </Col>
           </Row>
+
           <Row>
             <Col>Status: {status}</Col>
+          </Row>
+          <Row>
+            <Col>Quiz Grade: {quizScore} / 100%</Col>
           </Row>
         </Card.Body>
       </Card>
