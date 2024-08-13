@@ -2,7 +2,7 @@ import React from "react";
 import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
 import { useState, useEffect, useRef } from "react";
 import { useToast } from "../../../../contexts/ToastContext";
-import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
+import { confirmDialog } from "primereact/confirmdialog";
 import { ListBox } from "primereact/listbox";
 import {
   Carousel,
@@ -70,6 +70,17 @@ const Quiz = ({ topicId, onFinish }) => {
     }
   };
 
+  const postQuizResults = async (results, topicId) => {
+    try {
+      const response = await api.post(`api/topics/${topicId}/updateUserScore`, {
+        quiz_score: results.quizScore,
+      });
+      console.log("Quiz results posted successfully:", response.data);
+    } catch (error) {
+      console.error("Error posting quiz results:", error.message);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, [topicId]);
@@ -123,13 +134,14 @@ const Quiz = ({ topicId, onFinish }) => {
     console.log(totalPoints);
     return totalPoints;
   };
-  const confirmFinish = () => {
+  const confirmFinishQuiz = () => {
     confirmDialog({
       message: "Are you sure you want to finish?",
       header: "Confirmation",
       icon: "pi pi-exclamation-triangle",
       accept: () => {
         const result = calculateResult(selectedAnswers);
+        postQuizResults({ quizScore: result }, topicId);
         showToast(
           "info",
           "Confirmed",
@@ -146,7 +158,6 @@ const Quiz = ({ topicId, onFinish }) => {
 
   return (
     <>
-      <ConfirmDialog />
       <Container>
         <Carousel
           indicators={false}
@@ -201,7 +212,7 @@ const Quiz = ({ topicId, onFinish }) => {
             {index === questions.length - 1 ? (
               <Button
                 variant="primary"
-                onClick={confirmFinish}
+                onClick={confirmFinishQuiz}
                 hidden={index !== questions.length - 1}
               >
                 Finish

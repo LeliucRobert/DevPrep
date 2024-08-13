@@ -5,7 +5,6 @@ import LearnCard from "./LearnCard";
 
 const Lessons = ({ isAuthorized }) => {
   const [lessons, setLessons] = useState([]);
-  const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -14,7 +13,6 @@ const Lessons = ({ isAuthorized }) => {
       try {
         const [lessonsData, scoresData] = await Promise.all([
           getAllLessons(),
-          getUserScores(),
           setLoading(false),
         ]);
         setLessons(lessonsData);
@@ -28,16 +26,6 @@ const Lessons = ({ isAuthorized }) => {
 
     fetchData();
   }, []);
-
-  const getUserScores = async () => {
-    try {
-      const response = await api.get("/api/scores/");
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching scores:", error.message);
-      return [];
-    }
-  };
 
   const getAllLessons = async () => {
     try {
@@ -77,10 +65,6 @@ const Lessons = ({ isAuthorized }) => {
     return items;
   };
 
-  const lessonScoreMap = scores.reduce((acc, score) => {
-    acc[score.lesson] = score.score;
-    return acc;
-  }, {});
   return (
     <>
       {currentCards.map((lessons, index) => (
@@ -90,7 +74,6 @@ const Lessons = ({ isAuthorized }) => {
           text={lessons.description}
           level={lessons.difficulty}
           isAuthorized={isAuthorized}
-          score={lessonScoreMap[lessons.title] || "0"}
           lessonId={lessons.id}
         />
       ))}

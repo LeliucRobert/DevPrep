@@ -3,16 +3,22 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ModalLesson from "./View/ModalLesson";
 import ModalQuiz from "./Quiz/ModalQuiz";
 import api from "../../../api";
+import { confirmDialog } from "primereact/confirmdialog";
+import { useToast } from "../../../contexts/ToastContext";
+
 const LessonTopicCard = ({ initialStatus, topicId, topicContent }) => {
   const [status, setStatus] = useState("Not Completed");
   const [showLesson, setShowLesson] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   const [loading, setLoading] = useState(true);
   const [quizScore, setQuizScore] = useState(0);
+
+  const showToast = useToast();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,14 +40,51 @@ const LessonTopicCard = ({ initialStatus, topicId, topicContent }) => {
     fetchData();
   }, []);
 
-  const handleStatusChange = () => {
-    setStatus(status === "Completed" ? "Not Completed" : "Completed");
+  const deleteUserTopicStatus = async () => {
+    try {
+      const response = await api.delete(
+        `api/topics/${topicId}/deleteUserScore`
+      );
+      console.log(response);
+      setQuizScore(0);
+    } catch (error) {
+      console.error("Error deleting data:", error.message);
+    }
   };
 
+  const confirmFinish = () => {
+    confirmDialog({
+      message: "Are you sure you want to delete the progress?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      accept: () => {
+        showToast(
+          "info",
+          "Confirmed",
+          `You have successfully reset the progress for this topic`,
+          3000
+        );
+        deleteUserTopicStatus();
+      },
+
+      reject: () => {
+        showToast("warn", "Cancelled", "You have cancelled", 3000);
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (!loading && quizScore > 50) {
+      setStatus("Completed");
+    }
+  }, [loading, quizScore]);
+
   const cardStyle =
-    status === "Completed"
+    quizScore >= 50
       ? { backgroundColor: "#90EE90", color: "black" }
-      : { backgroundColor: "#FFA07A", color: "black" };
+      : quizScore > 0
+      ? { backgroundColor: "#FFA07A", color: "black" }
+      : { backgroundColor: "#e6e6fa", color: "black" };
 
   const handleShowLesson = () => {
     setShowLesson(true);
@@ -59,12 +102,6 @@ const LessonTopicCard = ({ initialStatus, topicId, topicContent }) => {
     setShowQuiz(false);
   };
 
-  useEffect(() => {
-    if (!loading && quizScore > 0) {
-      setStatus("Completed");
-    }
-  }, [loading, quizScore]);
-
   return (
     <>
       <Card style={cardStyle}>
@@ -78,9 +115,17 @@ const LessonTopicCard = ({ initialStatus, topicId, topicContent }) => {
                 View
               </Button>
             </Col>
-            <Col lg="2" xs="6">
+            <Col className="d-flex justify-content-end gap-2" lg="2" xs="6">
               <Button variant="primary" onClick={handleShowQuiz}>
                 Start Quiz
+              </Button>
+
+              <Button
+                variant="primary"
+                onClick={confirmFinish}
+                disabled={quizScore === 0}
+              >
+                Reset
               </Button>
             </Col>
           </Row>

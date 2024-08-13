@@ -21,6 +21,7 @@ const LessonTopics = ({ lesson_id }) => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 

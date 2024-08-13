@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import LessonTopicCard from "../components/Learn/Topics/LessonTopicCard";
 import LessonTopics from "../components/Learn/Topics/LessonTopics";
-
+import { ConfirmDialog } from "primereact/confirmdialog";
 const LessonPage = () => {
   const { title } = useParams();
 
@@ -23,6 +23,7 @@ const LessonPage = () => {
 
   return (
     <>
+      <ConfirmDialog />
       <Row className="learn-row"></Row>
       <Row className="learn-header mb-4">
         <Col lg="2"></Col>

@@ -10,7 +10,7 @@ import {
 } from "react-bootstrap";
 import Quiz from "./Quiz";
 import { useToast } from "../../../../contexts/ToastContext";
-import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
+import { confirmDialog } from "primereact/confirmdialog";
 const ModalQuiz = ({ show, handleClose, topicId }) => {
   const showToast = useToast();
 
