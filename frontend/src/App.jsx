@@ -12,7 +12,8 @@ import Layout from "./pages/Layout";
 import "./styles/index.css";
 import LessonPage from "./pages/LessonPage";
 import Profile from "./pages/Profile";
-
+import SolveProblems from "./pages/SolveProblems";
+import ProblemPage from "./pages/ProblemPage";
 function App() {
   return (
     <AuthProvider>
@@ -29,8 +30,10 @@ function App() {
                 }
               />
               <Route path="/profile/:username" element={<Profile />}></Route>
+              <Route path="/problems" element={<SolveProblems />}></Route>
               <Route path="/learn" element={<Learn />}></Route>
               <Route path="/learn/:title" element={<LessonPage />} />
+              <Route path="/problems/:id" element={<ProblemPage />} />
               <Route path="/login" element={<Login />}></Route>
               <Route path="/*" element={<NotFound />}></Route>
             </Routes>

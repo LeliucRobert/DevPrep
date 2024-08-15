@@ -108,3 +108,31 @@ class UserLessonScore(models.Model):
 
     def __str__(self):
         return f"{self.user.username} scored {self.score} on {self.lesson.title}"
+
+class Problem(models.Model):
+    title = models.CharField(max_length=100)
+    card_description = models.TextField()
+    description = models.TextField()
+    input_description = models.TextField()
+    output_description = models.TextField()
+    restrictions = models.TextField()
+    sample_input = models.TextField()
+    sample_output = models.TextField()
+    difficulty = models.CharField(max_length=10, choices=[
+        ('Easy', 'Easy'),
+        ('Medium', 'Medium'),
+        ('Hard', 'Hard')])
+    category = models.CharField(
+    max_length=10,
+    choices=[
+        ("dp", "Dynamic Programming"),
+        ("greedy", "Greedy"),
+        ("graph", "Graph"),
+        ("math", "Math"),
+        ("string", "String"),
+        ("tree", "Tree"),
+        ("other", "Other")
+    ]
+    )
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)

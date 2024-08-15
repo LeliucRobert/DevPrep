@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics, status
-from .serializers import UserSerializer, NoteSerializer, LessonSerializer, UserLessonScoreSerializer, TopicSerializer, QuizSerializer, QuestionSerializer, AnswerSerializer, UserTopicStatusSerializer
+from .serializers import UserSerializer, NoteSerializer, LessonSerializer, UserLessonScoreSerializer, TopicSerializer, QuizSerializer, QuestionSerializer, AnswerSerializer, UserTopicStatusSerializer, ProblemSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Note, Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus
+from .models import Note, Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem
 from django.http import JsonResponse
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
@@ -213,4 +213,11 @@ def delete_user_topic_status(request, topic_id):
         return Response({"detail": "Topic not found."}, status=status.HTTP_404_NOT_FOUND)
     except UserTopicStatus.DoesNotExist:
         return Response({"detail": "User topic status not found."}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_problems(request):
+    problems = Problem.objects.all()
+    serializer = ProblemSerializer(problems, many=True)
+    return Response(serializer.data)
 

@@ -1,0 +1,70 @@
+.problem-description {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.problem-input-data {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.problem-output-data {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.problem-constraints {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.problem-example {
+  margin-top: 50px;
+  margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: 500;
+  color: #000000;
+}
+
+.problem-example-input {
+  margin-top: 20px;
+  background-color: #f4f4f4; /* Light grey background */
+  border: 1px solid #ccc; /* Light grey border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Padding inside the box */
+  display: block; /* Makes sure it behaves as a block element */
+  /* Adds some margin for spacing */
+  white-space: pre-wrap; /* Preserves formatting but allows wrapping */
+  font-family: monospace;
+}
+
+.problem-example-output {
+  margin-top: 20px;
+  background-color: #f4f4f4; /* Light grey background */
+  border: 1px solid #ccc; /* Light grey border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Padding inside the box */
+  display: block; /* Makes sure it behaves as a block element */
+  /* Adds some margin for spacing */
+  white-space: pre-wrap; /* Preserves formatting but allows wrapping */
+  font-family: monospace;
+}
+
+.difficulty-badge {
+  font-size: 20px; /* Increase the font size */
+
+  border-radius: 10px; /* Adjust the border radius for rounded corners */
+  padding: 7px 20px;
+}
