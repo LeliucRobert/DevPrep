@@ -4,8 +4,8 @@ import Col from "react-bootstrap/Col";
 import Lessons from "../components/Learn/Lessons";
 import FilterBy from "../components/Utils/FilterBy";
 import SortBy from "../components/Utils/SortBy";
-import ProblemCard from "../components/SolveProblems.jsx/ProblemCard";
-import Problems from "../components/SolveProblems.jsx/Problems";
+import ProblemCard from "../components/SolveProblems/ProblemCard";
+import Problems from "../components/SolveProblems/Problems";
 const SolveProblems = () => {
   return (
     <div>

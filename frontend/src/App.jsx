@@ -14,12 +14,14 @@ import LessonPage from "./pages/LessonPage";
 import Profile from "./pages/Profile";
 import SolveProblems from "./pages/SolveProblems";
 import ProblemPage from "./pages/ProblemPage";
+import ScrollToTop from "./components/Utils/ScrollToTop";
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <ToastProvider>
           <Layout>
+            <ScrollToTop />
             <Routes>
               <Route
                 path="/"

@@ -6,6 +6,7 @@ import { Row, Col } from "react-bootstrap";
 import "../styles/SolveProblems/ProblemPage.css";
 import { Alert } from "react-bootstrap";
 import { Badge } from "react-bootstrap";
+import CodeEditor from "../components/SolveProblems/CodeEditor";
 const ProblemPage = () => {
   const { title } = useParams();
 
@@ -116,7 +117,9 @@ const ProblemPage = () => {
               </div>
             </Col>
           </Row>
-          <Row>hahaahhahahah</Row>
+          <Row>
+            <CodeEditor problemId={problemData.id} />
+          </Row>
         </Col>
         <Col lg="2"></Col>
       </Row>

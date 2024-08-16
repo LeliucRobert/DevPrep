@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Note, Lesson, UserLessonScore, Quiz, Question, Answer, Topic, UserTopicStatus, Problem
+from .models import Note, Lesson, UserLessonScore, Quiz, Question, Answer, Topic, UserTopicStatus, Problem, ProblemTest
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,6 +62,11 @@ class ProblemSerializer(serializers.ModelSerializer):
     created_by  = UserSerializer(read_only=True)
     class Meta:
         model = Problem
+        fields = "__all__"
+
+class ProblemTestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProblemTest
         fields = "__all__"
 
     

@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import create_lesson, get_all_lessons, get_user_scores, get_lesson_details, create_topic, get_topics, create_quiz, get_quiz, create_question, get_question, create_answer, get_answer
-from .views import get_user_topic_status, post_user_topic_status, delete_user_topic_status, get_user_topics_status_for_lesson, get_problems
+from .views import get_user_topic_status, post_user_topic_status, delete_user_topic_status, get_user_topics_status_for_lesson, get_problems, post_submission, get_tests
 from . import views
 
 urlpatterns =[
@@ -21,4 +21,6 @@ urlpatterns =[
     path("topics/<int:topic_id>/deleteUserScore", delete_user_topic_status, name="delete-user-score"),
     path("lessons/<int:lesson_id>/UserTopicScores", get_user_topics_status_for_lesson, name="user-topic-scores-for-lesson"),
     path("problems/" , get_problems , name="problems-list"),
+    path("problems/<int:problem_id>/submission" , post_submission , name="submission-list-create"),
+    path("problems/<int:problem_id>/tests" , get_tests , name="tests-list"),
 ]

@@ -8,16 +8,15 @@ JUDGE0_API_KEY = os.getenv('JUDGE0_API_KEY')
 def get_language_id(language):
     languages = {
         "C":50,
-        "C++":54,
+        "cpp":54,
         "C#":51,
-        "Java":91,
-        "JavaScript":93,
-        "Python":92,
+        "java":91,
+        "javascript":93,
+        "python":92,
     }
-
+    return languages[language]
 
 def create_submission(source_code, language_id, stdin):
-    print(JUDGE0_API_KEY)
     url = "https://judge0-ce.p.rapidapi.com/submissions"
 
     querystring = {"base64_encoded":"true","wait":"false","fields":"*"}
@@ -50,3 +49,14 @@ def get_submission(token):
 
     return response.json()
 
+def get_statuses():
+    url = 'https://judge0-ce.p.rapidapi.com/statuses'
+
+    headers = {
+        "x-rapidapi-key": JUDGE0_API_KEY,
+        "x-rapidapi-host": "judge0-ce.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers)
+
+    print(response.json())

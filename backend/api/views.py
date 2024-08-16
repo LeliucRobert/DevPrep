@@ -1,15 +1,16 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics, status
-from .serializers import UserSerializer, NoteSerializer, LessonSerializer, UserLessonScoreSerializer, TopicSerializer, QuizSerializer, QuestionSerializer, AnswerSerializer, UserTopicStatusSerializer, ProblemSerializer
+from .serializers import UserSerializer, NoteSerializer, LessonSerializer, UserLessonScoreSerializer, TopicSerializer, QuizSerializer, QuestionSerializer, AnswerSerializer, UserTopicStatusSerializer, ProblemSerializer, ProblemTestSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Note, Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem
+from .models import Note, Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest
 from django.http import JsonResponse
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib import admin
+from .judge.judge_service import test_code
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -175,14 +176,14 @@ def post_user_topic_status(request, topic_id):
     if user.is_anonymous:
         return Response({"detail": "Authentication required."}, status=status.HTTP_401_UNAUTHORIZED)
 
-    quiz_score = request.data['quiz_score'] * 100 # Ensure this matches the request body key
+    quiz_score = request.data['quiz_score'] * 100 
     if quiz_score is None:
         return Response({"detail": "Quiz score is required."}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
         topic = Topic.objects.get(id=topic_id)
 
-        # Debugging: Check before saving
+        
         print(f"Attempting to save: user={user}, topic={topic}, quiz_score={quiz_score}")
 
         user_topic_status, created = UserTopicStatus.objects.update_or_create(
@@ -191,7 +192,7 @@ def post_user_topic_status(request, topic_id):
             defaults={'quizScore': quiz_score}
         )
 
-        # Debugging: Check result of save operation
+        
         print(f"UserTopicStatus {'created' if created else 'updated'}: {user_topic_status}")
 
         serializer = UserTopicStatusSerializer(user_topic_status)
@@ -221,3 +222,23 @@ def get_problems(request):
     serializer = ProblemSerializer(problems, many=True)
     return Response(serializer.data)
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def post_submission(request, problem_id):
+    
+    user_code = request.data['user_code']
+    language = request.data['language']
+    tests = ProblemTest.objects.filter(problem=problem_id)    
+    testSerializer = ProblemTestSerializer(tests, many=True)
+    test_code(user_code , language,  testSerializer.data)
+
+    return Response(request.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_tests(request , problem_id):
+    tests = ProblemTest.objects.filter(problem=problem_id)
+    serializer = ProblemTestSerializer(tests, many=True)
+    return Response(serializer.data)
+    

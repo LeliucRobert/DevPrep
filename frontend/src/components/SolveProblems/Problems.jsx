@@ -43,7 +43,14 @@ const Problems = ({ isAuthorized }) => {
 
   const totalPages = Math.ceil(problems.length / cardsPerPage);
 
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handlePageChange = (pageNumber) => {
+    scrollToTop();
+    setCurrentPage(pageNumber);
+  };
 
   const renderPaginationItems = () => {
     let items = [];

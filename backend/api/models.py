@@ -136,3 +136,15 @@ class Problem(models.Model):
     )
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+class ProblemTest(models.Model):
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    test_input = models.TextField()
+    test_output = models.TextField()
+
+
+    def __str__(self):
+        return f'Id: {self.id} | Problem: {self.problem.title}'
