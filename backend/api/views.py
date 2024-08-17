@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib import admin
 from .judge.judge_service import test_code
-
+import time
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -229,11 +229,22 @@ def post_submission(request, problem_id):
     
     user_code = request.data['user_code']
     language = request.data['language']
+    
     tests = ProblemTest.objects.filter(problem=problem_id)    
     testSerializer = ProblemTestSerializer(tests, many=True)
-    test_code(user_code , language,  testSerializer.data)
+    task = test_code.delay(user_code , language,  testSerializer.data)
 
-    return Response(request.data)
+    while not task.ready():
+        time.sleep(1)  # Sleep for a short interval before checking again
+    print(":haha")
+    if task.successful():
+        print("okoko")
+
+        result = task.get()
+        print(result)
+        return Response({'result': result}, status=200)
+    else:
+        return Response({'error': 'Task failed or did not complete successfully.'}, status=500)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

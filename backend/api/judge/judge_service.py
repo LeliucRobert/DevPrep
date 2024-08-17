@@ -1,5 +1,35 @@
 from .judge_api import get_language_id, create_submission, get_submission, get_statuses
 import base64
+from celery import shared_task
+import time
+
+import logging
+from django.conf import settings
+settings.CELERY_ALWAYS_EAGER = True
+
+
+@shared_task
+def test_code(code , language , tests):
+    results = []
+    for test in tests:
+        test_input = test['test_input']
+        test_output = test['test_output']
+        test_input_base64 = encode_base64(test_input)
+       
+        code_base64, language_id , test_input_base64, test_output_base64 = encode_data_base64(code , language , test_input, test_output)
+        
+        token = run_code(code_base64 , language_id , test_input_base64, test_output_base64)
+    
+
+        result = get_result_by_token(token['token'])
+        while result['status']['description'] not in ['Accepted', 'Compilation Error', 'Runtime Error', 'Wrong Answer']:
+            time.sleep(5)
+            result = get_result_by_token(token['token'])
+        results.append(result)
+    
+    print(results)
+    return results
+  
 
 def encode_base64(string):
     if isinstance(string, bytes):
@@ -19,32 +49,18 @@ def decode_base64(base64_string):
     string = string_bytes.decode('utf-8')
     return string
 
-def run_code(code_base64 , language_id , test_input_base64):
-    token = create_submission(code_base64 , language_id , test_input_base64)
+def run_code(code_base64 , language_id , test_input_base64, test_output_base64):
+    token = create_submission(code_base64 , language_id , test_input_base64, test_output_base64)
     return token
 
-def encode_data_base64(code , language , test_input):
+def encode_data_base64(code , language , test_input, test_output):
     language_id = get_language_id(language)
     code_base64 = encode_base64(code)
     test_input_base64 = encode_base64(test_input)
-    return code_base64 , language_id , test_input_base64
+    test_output_base64 = encode_base64(test_output)
+    return code_base64 , language_id , test_input_base64, test_output_base64
 
 def get_result_by_token(token):
-    response = get_submission('351f4fea-125a-4fdb-a293-a9abe925fdbc')
+    response = get_submission(token)
     return response
 
-def test_code(code , language , tests):
-
-    
-    test_input = tests[0]['test_input']
-    test_output = tests[0]['test_output']
-    # test_input_base64 = encode_base64(test_input)
-  
-    # code_base64, language_id , test_input_base64 = encode_data_base64(code , language , test_input)
-    # token = run_code(code_base64 , language_id , test_input_base64)
-    
-    # print(token)
-
-    # result = get_result_by_token(token['token'])
-    # print(result)
-    # get_statuses()

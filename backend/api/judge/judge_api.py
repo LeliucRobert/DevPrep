@@ -16,15 +16,16 @@ def get_language_id(language):
     }
     return languages[language]
 
-def create_submission(source_code, language_id, stdin):
+def create_submission(source_code, language_id, stdin, expected_output):
     url = "https://judge0-ce.p.rapidapi.com/submissions"
 
-    querystring = {"base64_encoded":"true","wait":"false","fields":"*"}
+    querystring = {"base64_encoded":"true","wait":"true","fields":"*"}
 
     payload = {
         "language_id": language_id,
         "source_code": source_code,
-        "stdin": stdin
+        "stdin": stdin,
+        "expected_output": expected_output
     }
     headers = {
         "x-rapidapi-key": JUDGE0_API_KEY,
