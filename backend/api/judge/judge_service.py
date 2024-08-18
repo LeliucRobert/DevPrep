@@ -9,15 +9,17 @@ settings.CELERY_ALWAYS_EAGER = True
 
 @shared_task
 def test_code(code , language , tests, submission_id):
-    from api.models import Submission, SubmissionTest
+    from api.models import Submission, SubmissionTest, UserProblemScore
     from django.db import transaction
+    print(language)
     results = []
     total_score = 0
     max_retries = 10 
     retry_delay = 5
 
     submission = Submission.objects.get(id=submission_id)
-
+    user = submission.user
+    problem = submission.problem
     try:
         with transaction.atomic():
             for test in tests:
@@ -59,6 +61,15 @@ def test_code(code , language , tests, submission_id):
             submission.total_score = total_score
             submission.status = 'Completed'
             submission.save()
+
+            try:
+                user_problem_score = UserProblemScore.objects.get(user=user, problem=problem)
+
+                if user_problem_score.score < total_score:
+                    user_problem_score.score = total_score
+                    user_problem_score.save()
+            except UserProblemScore.DoesNotExist:
+                UserProblemScore.objects.create(user=user, problem=problem, score=total_score)
 
 
         print(results)

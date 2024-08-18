@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Editor from "@monaco-editor/react";
 import "../../styles/SolveProblems/CodeEditor.css";
@@ -22,48 +22,16 @@ const CodeSubmissionForm = ({ problemId }) => {
   const [errorMessages, setErrorMessages] = useState("");
   const resultsRectangle = useRef(null);
 
-  const res = [
-    {
-      source_code: "Ly8gU3RhcnQgY29kaW5nIGluIEMrKyBoZXJlLi4u",
-      language: "...",
-      status: "accepted",
-    },
-    {
-      source_code: "Ly8gU3RhcnQgY29kaW5nIGluIEMrKyBoZXJlLi4u",
-      language: "...",
-      status: "compilation error",
-    },
-    {
-      source_code: "Ly8gU3RhcnQgY29kaW5nIGluIEMrKyBoZXJlLi4u",
-      language: "...",
-      status: "wrong answer",
-    },
-  ];
-
   const handleLanguageChange = (e) => {
     const selectedLanguage = e.target.value;
     setLanguage(selectedLanguage);
     setCode(initialCodeByLanguage[selectedLanguage]);
   };
 
-  // async function postCode() {
-  //   setLoading(true);
-  //   try {
-  //     const response = await api.post(`api/problems/${problemId}/submission`, {
-  //       user_code: code,
-  //       language: language,
-  //     });
-  //     console.log(response.data);
-  //     setTestResults(response.data);
-  //   } catch (error) {
-  //     console.error("Error submitting code:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
   const sleep = (ms) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   };
+
   const handleSubmitButton = async () => {
     setShowResults(true);
     setLoading(true);
@@ -114,11 +82,14 @@ const CodeSubmissionForm = ({ problemId }) => {
       console.error("Error during submission process:", error);
     } finally {
       setLoading(false);
-      setTimeout(() => {
-        resultsRectangle.current.scrollIntoView({ behavior: "smooth" });
-      }, 100);
     }
   };
+
+  useEffect(() => {
+    if (showResults) {
+      resultsRectangle.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [loading, showResults]);
 
   const handleEditorChange = (value, event) => {
     setCode(value);

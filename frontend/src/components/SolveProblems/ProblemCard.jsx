@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Alert } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Rating } from "primereact/rating";
 import { Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import api from "../../api";
 const ProblemCard = ({
   id,
   title,
@@ -23,7 +24,8 @@ const ProblemCard = ({
   sample_output,
   category,
 }) => {
-  const [value, setValue] = useState(0);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [score, setScore] = useState(0);
   const navigate = useNavigate();
 
   const handleSolveProblem = () => {
@@ -45,6 +47,57 @@ const ProblemCard = ({
     navigate(`/problems/${encodeURIComponent(id)}`, { state: problemData });
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [ratings, scores] = await Promise.all([
+          getRatings(),
+          getScores(),
+        ]);
+        setRatingValue(ratings.rating);
+        setScore(scores.score);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  });
+
+  const getRatings = async () => {
+    try {
+      const response = await api.get(`api/problems/${id}/getRating`);
+
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching rating:", error);
+      return [];
+    }
+  };
+
+  const getScores = async () => {
+    try {
+      const response = await api.get(`api/problems/${id}/userScore`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user score:", error);
+      return [];
+    }
+  };
+
+  const ratingChange = async (event) => {
+    try {
+      const response = await api.post(`api/problems/${id}/setRating`, {
+        rating: event.value,
+      });
+      setRatingValue(event.value);
+      return response.data;
+    } catch (error) {
+      console.error("Error setting rating:", error);
+    } finally {
+      console.log("Rating set successfully");
+    }
+  };
+
   return (
     <Card className="mb-5">
       <Card.Header as="h5">
@@ -58,8 +111,19 @@ const ProblemCard = ({
             </Alert>
           </Col>
           <Col lg="1">
-            <Alert variant="dark" className="idAlert mb-0">
-              0/100
+            <Alert
+              variant={
+                score === 0
+                  ? "danger"
+                  : score === 100
+                  ? "success"
+                  : score > 0 && score < 100
+                  ? "warning"
+                  : "secondary"
+              }
+              className="idAlert mb-0"
+            >
+              {score}/100
             </Alert>
           </Col>
         </Row>
@@ -107,7 +171,7 @@ const ProblemCard = ({
             </span>
           </Col>
           <Col>
-            <Rating value={value} onChange={(e) => setValue(e.value)} />
+            <Rating value={ratingValue} onChange={ratingChange} />
           </Col>
         </Row>
       </Card.Body>

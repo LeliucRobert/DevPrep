@@ -192,3 +192,20 @@ class UserProblemScore (models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     score = models.PositiveIntegerField(default=0 , validators=[MinValueValidator(0), MaxValueValidator(100)])
 
+    class Meta:
+        unique_together = ('user', 'problem')
+
+    def __str__(self):
+        return f'Id: {self.id} | User: {self.user.username} | Problem: {self.problem.title} | Score: {self.score}'
+
+
+class UserRatingProblem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+
+    class Meta:
+        unique_together = ('user', 'problem')
+
+    def __str__(self):
+        return f'Id: {self.id} | User: {self.user.username} | Rating: {self.rating}'

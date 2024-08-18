@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics, status
-from .serializers import UserSerializer, NoteSerializer, LessonSerializer, UserLessonScoreSerializer, TopicSerializer, QuizSerializer, QuestionSerializer, AnswerSerializer, UserTopicStatusSerializer, ProblemSerializer, ProblemTestSerializer, SubmissionSerializer
+from .serializers import UserSerializer, NoteSerializer, LessonSerializer, UserLessonScoreSerializer, TopicSerializer, QuizSerializer, QuestionSerializer, AnswerSerializer, UserTopicStatusSerializer, ProblemSerializer, ProblemTestSerializer, SubmissionSerializer, UserRatingProblemSerializer, UserProblemScoreSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Note, Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest, Submission, SubmissionTest
+from .models import Note, Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest, Submission, SubmissionTest, UserRatingProblem, UserProblemScore
 from django.http import JsonResponse
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
@@ -224,7 +224,7 @@ def get_problems(request):
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def post_submission(request, problem_id):
     
     user = request.user
@@ -250,7 +250,7 @@ def post_submission(request, problem_id):
     return Response ({'task_id': task.id , 'submission_id': submission.id}, status=202)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def get_submission_results(request, submission_id):
     try:
         submission = Submission.objects.get(id=submission_id, user=request.user)
@@ -283,9 +283,58 @@ def get_submission_results(request, submission_id):
         return Response({'error': str(e)}, status=500)
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def get_tests(request , problem_id):
     tests = ProblemTest.objects.filter(problem=problem_id)
     serializer = ProblemTestSerializer(tests, many=True)
     return Response(serializer.data)
-    
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def post_rating(request, problem_id):
+    user = request.user
+    problem = Problem.objects.get(id=problem_id)
+    rating = request.data['rating']
+    if rating is None:
+        rating = 0
+    elif rating < 0 or rating > 5:
+        return Response({'error': 'Rating must be between 0 and 5'} , status=400)
+    user_rating, created = UserRatingProblem.objects.update_or_create(user=user, problem=problem, defaults={'rating': rating})
+    serializer = UserRatingProblemSerializer(user_rating)
+    return Response(serializer.data, status=201 if created else 200)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_rating(request, problem_id):
+    try:
+        user = request.user
+        problem = Problem.objects.get(id=problem_id)
+        user_rating = UserRatingProblem.objects.get(user=user, problem=problem)
+        serializer = UserRatingProblemSerializer(user_rating)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_problem_score(request, problem_id):
+    try:
+        user = request.user
+        problem = Problem.objects.get(id=problem_id)
+        user_problem_score = UserProblemScore.objects.get(user=user, problem=problem)
+        serializer = UserProblemScoreSerializer(user_problem_score)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_submissions_on_problem(request , problem_id):
+    try:
+        user = request.user
+        problem = Problem.objects.get(id=problem_id)
+        submissions = Submission.objects.filter(user=user, problem=problem)
+        serializer = SubmissionSerializer(submissions, many=True)
+        return Response(serializer.data)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)

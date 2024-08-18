@@ -68,3 +68,16 @@
   border-radius: 10px; /* Adjust the border radius for rounded corners */
   padding: 7px 20px;
 }
+/* 
+.submission-card {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #f4f4f4;
+} */
+
+.submission-alert {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+}
