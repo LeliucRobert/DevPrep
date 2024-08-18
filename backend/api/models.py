@@ -148,3 +148,47 @@ class ProblemTest(models.Model):
 
     def __str__(self):
         return f'Id: {self.id} | Problem: {self.problem.title}'
+
+class Submission(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    user_code = models.TextField()
+    language = models.CharField(max_length=10, choices=[
+        ('python', 'Python'),
+        ('java', 'Java'),
+        ('cpp', 'C++'),
+        ('javascript', 'JavaScript')])
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=[
+        ('Failed', 'Failed'),
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+        ('Time Limit Exceeded', 'Time Limit Exceeded'),
+        ('Runtime Error', 'Runtime Error'),
+        ('Compilation Error', 'Compilation Error')])
+    total_score = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
+
+    def __str__(self):
+        return f'Id: {self.id} | Problem: {self.problem.title} | Status: {self.status}'
+
+
+class SubmissionTest(models.Model):
+    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+    problem_test = models.ForeignKey(ProblemTest, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=[
+        ('Accepted', 'Accepted'),
+        ('Wrong Answer', 'Wrong Answer'),
+        ('Time Limit Exceeded', 'Time Limit Exceeded'),
+        ('Runtime Error', 'Runtime Error'),
+        ('Compilation Error', 'Compilation Error')])
+    score = models.PositiveIntegerField(default=0 , validators=[MinValueValidator(0), MaxValueValidator(100)])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Id: {self.id} | Submission: {self.submission.id} | Test: {self.problem_test.id} | Status: {self.status}'
+
+class UserProblemScore (models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    score = models.PositiveIntegerField(default=0 , validators=[MinValueValidator(0), MaxValueValidator(100)])
+

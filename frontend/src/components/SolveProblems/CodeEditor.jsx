@@ -18,7 +18,8 @@ const CodeSubmissionForm = ({ problemId }) => {
   const [testResults, setTestResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const [finalScore, setFinalScore] = useState(0);
+  const [errorMessages, setErrorMessages] = useState("");
   const resultsRectangle = useRef(null);
 
   const res = [
@@ -45,32 +46,78 @@ const CodeSubmissionForm = ({ problemId }) => {
     setCode(initialCodeByLanguage[selectedLanguage]);
   };
 
-  async function postCode() {
-    setLoading(true);
-    try {
-      const response = await api.post(`api/problems/${problemId}/submission`, {
-        user_code: code,
-        language: language,
-      });
-      console.log(response.data);
-      setTestResults(response.data);
-    } catch (error) {
-      console.error("Error submitting code:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // async function postCode() {
+  //   setLoading(true);
+  //   try {
+  //     const response = await api.post(`api/problems/${problemId}/submission`, {
+  //       user_code: code,
+  //       language: language,
+  //     });
+  //     console.log(response.data);
+  //     setTestResults(response.data);
+  //   } catch (error) {
+  //     console.error("Error submitting code:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
   const sleep = (ms) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   };
   const handleSubmitButton = async () => {
     setShowResults(true);
-    // postCode();
+    setLoading(true);
 
-    setLoading(false);
-    setTimeout(() => {
-      resultsRectangle.current.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+    try {
+      const postResponse = await api.post(
+        `api/problems/${problemId}/submission`,
+        {
+          user_code: code,
+          language: language,
+        }
+      );
+
+      const submissionId = postResponse.data.submission_id;
+      console.log(`Submission ID: ${submissionId}`);
+
+      let pollResponse;
+      let isCompleted = false;
+      const maxAttempts = 10;
+      let attempts = 0;
+
+      while (!isCompleted && attempts < maxAttempts) {
+        await sleep(2000);
+
+        pollResponse = await api.get(`api/submissions/${submissionId}/results`);
+        console.log(pollResponse.data);
+
+        if (pollResponse.data.status === "Completed") {
+          isCompleted = true;
+          setTestResults(pollResponse.data.results);
+          setFinalScore(pollResponse.data.total_score);
+          setErrorMessages("");
+        } else if (pollResponse.data.status === "Compilation Error") {
+          isCompleted = true;
+          setErrorMessages("Compilation Error!");
+        } else if (pollResponse.data.status === "Failed") {
+          isCompleted = true;
+          setErrorMessages("Something bad happened!");
+        }
+
+        attempts += 1;
+      }
+
+      if (!isCompleted) {
+        console.error("Failed to retrieve submission results in time.");
+      }
+    } catch (error) {
+      console.error("Error during submission process:", error);
+    } finally {
+      setLoading(false);
+      setTimeout(() => {
+        resultsRectangle.current.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
   };
 
   const handleEditorChange = (value, event) => {
@@ -137,20 +184,37 @@ const CodeSubmissionForm = ({ problemId }) => {
               </div>
             </div>
           </div>
+        ) : errorMessages !== "" ? (
+          <div
+            className="grey-background results-rectangle"
+            ref={resultsRectangle}
+          >
+            <div className="results-container">
+              <div className="text-container">
+                <h2 className="mt-4">Error</h2>
+                <p>There was an error running your code:</p>
+                <p>{errorMessages}</p>
+              </div>
+            </div>
+          </div>
         ) : (
           <div
             className="grey-background results-rectangle"
             ref={resultsRectangle}
           >
-            <h5 className="mt-4">Test results</h5>
+            <h3 className="mt-4 mb-4 text-center">
+              <strong>Test results</strong>
+            </h3>
             <div>
-              {res.map((item, index) => (
+              {testResults.map((item, index) => (
                 <div
                   className={`test-result ${
-                    item.status === "accepted"
+                    item.status === "Accepted"
                       ? "accepted"
-                      : item.status === "wrong answer"
+                      : item.status === "Wrong Answer"
                       ? "wrong-answer"
+                      : item.status === "Compilation Error"
+                      ? "compilation-error"
                       : "default"
                   }`}
                   key={index}
@@ -160,25 +224,25 @@ const CodeSubmissionForm = ({ problemId }) => {
                     <strong>Status: {item.status}</strong>
                   </p>
                   <p>
-                    <i>25p</i>
+                    <i>{item.score ? `${item.score}p` : "0p"}</i>
                   </p>
 
-                  {item.status === "accepted" && (
+                  {item.status === "Accepted" && (
                     <img
                       src="/public/images/good.png"
                       alt="Accepted Icon"
                       className="icon-small"
                     />
                   )}
-                  {item.status === "wrong answer" && (
+                  {item.status === "Wrong Answer" && (
                     <img
                       src="/public/images/wrong.png"
                       alt="Wrong Answer Icon"
                       className="icon-small"
                     />
                   )}
-                  {item.status !== "accepted" &&
-                    item.status !== "wrong answer" && (
+                  {item.status !== "Accepted" &&
+                    item.status !== "Wrong Answer" && (
                       <img
                         src="/public/images/danger.png"
                         alt="Default Icon"
@@ -190,7 +254,7 @@ const CodeSubmissionForm = ({ problemId }) => {
             </div>
             <div className="final-score">
               <Alert variant="warning" className="alert-final-score">
-                <h2>Final Score: 0/100</h2>
+                <h2>Final Score: {finalScore}</h2>
               </Alert>
             </div>
           </div>

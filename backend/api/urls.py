@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import create_lesson, get_all_lessons, get_user_scores, get_lesson_details, create_topic, get_topics, create_quiz, get_quiz, create_question, get_question, create_answer, get_answer
-from .views import get_user_topic_status, post_user_topic_status, delete_user_topic_status, get_user_topics_status_for_lesson, get_problems, post_submission, get_tests
+from .views import get_user_topic_status, post_user_topic_status, delete_user_topic_status, get_user_topics_status_for_lesson, get_problems, post_submission, get_tests, get_submission_results
 from . import views
 
 urlpatterns =[
@@ -23,4 +23,5 @@ urlpatterns =[
     path("problems/" , get_problems , name="problems-list"),
     path("problems/<int:problem_id>/submission" , post_submission , name="submission-list-create"),
     path("problems/<int:problem_id>/tests" , get_tests , name="tests-list"),
+    path("submissions/<int:submission_id>/results" , get_submission_results , name="results-list"),
 ]

@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics, status
-from .serializers import UserSerializer, NoteSerializer, LessonSerializer, UserLessonScoreSerializer, TopicSerializer, QuizSerializer, QuestionSerializer, AnswerSerializer, UserTopicStatusSerializer, ProblemSerializer, ProblemTestSerializer
+from .serializers import UserSerializer, NoteSerializer, LessonSerializer, UserLessonScoreSerializer, TopicSerializer, QuizSerializer, QuestionSerializer, AnswerSerializer, UserTopicStatusSerializer, ProblemSerializer, ProblemTestSerializer, SubmissionSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Note, Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest
+from .models import Note, Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest, Submission, SubmissionTest
 from django.http import JsonResponse
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
@@ -224,27 +224,63 @@ def get_problems(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def post_submission(request, problem_id):
     
+    user = request.user
     user_code = request.data['user_code']
     language = request.data['language']
     
+    problem = Problem.objects.get(id=problem_id)
+
+    submission = Submission.objects.create(
+        user=user,
+        problem=problem,
+        user_code=user_code,
+        language=language,
+        status='Pending'
+    )
+
     tests = ProblemTest.objects.filter(problem=problem_id)    
     testSerializer = ProblemTestSerializer(tests, many=True)
-    task = test_code.delay(user_code , language,  testSerializer.data)
 
-    while not task.ready():
-        time.sleep(1)  # Sleep for a short interval before checking again
-    print(":haha")
-    if task.successful():
-        print("okoko")
 
-        result = task.get()
-        print(result)
-        return Response({'result': result}, status=200)
-    else:
-        return Response({'error': 'Task failed or did not complete successfully.'}, status=500)
+    task = test_code.delay(user_code , language,  testSerializer.data, submission.id)
+
+    return Response ({'task_id': task.id , 'submission_id': submission.id}, status=202)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_submission_results(request, submission_id):
+    try:
+        submission = Submission.objects.get(id=submission_id, user=request.user)
+
+        if submission.status == 'Completed':
+            submission_tests = SubmissionTest.objects.filter(submission=submission)
+
+            results = [
+                {
+                    'test_id': st.problem_test.id,
+                    'status': st.status,
+                    'score': st.score,
+                }
+                for st in submission_tests
+            ]
+
+            return Response({
+                'status': 'Completed',
+                'results': results,
+                'total_score': submission.total_score,
+            }, status=200)
+        elif submission.status in ['Pending']:
+            return Response({'status': 'Pending'}, status=200)
+        else:
+            return Response({'status': submission.status}, status=200)
+
+    except Submission.DoesNotExist:
+        return Response({'error': 'Submission not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

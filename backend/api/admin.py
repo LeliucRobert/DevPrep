@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest
+from .models import Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest, Submission, SubmissionTest
 # Register your models here.
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -16,3 +16,5 @@ admin.site.register(Answer)
 admin.site.register(UserTopicStatus)
 admin.site.register(Problem)
 admin.site.register(ProblemTest)
+admin.site.register(Submission)
+admin.site.register(SubmissionTest)

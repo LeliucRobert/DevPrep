@@ -2,33 +2,72 @@ from .judge_api import get_language_id, create_submission, get_submission, get_s
 import base64
 from celery import shared_task
 import time
-
 import logging
 from django.conf import settings
 settings.CELERY_ALWAYS_EAGER = True
 
 
 @shared_task
-def test_code(code , language , tests):
+def test_code(code , language , tests, submission_id):
+    from api.models import Submission, SubmissionTest
+    from django.db import transaction
     results = []
-    for test in tests:
-        test_input = test['test_input']
-        test_output = test['test_output']
-        test_input_base64 = encode_base64(test_input)
-       
-        code_base64, language_id , test_input_base64, test_output_base64 = encode_data_base64(code , language , test_input, test_output)
-        
-        token = run_code(code_base64 , language_id , test_input_base64, test_output_base64)
-    
+    total_score = 0
+    max_retries = 10 
+    retry_delay = 5
 
-        result = get_result_by_token(token['token'])
-        while result['status']['description'] not in ['Accepted', 'Compilation Error', 'Runtime Error', 'Wrong Answer']:
-            time.sleep(5)
-            result = get_result_by_token(token['token'])
-        results.append(result)
-    
-    print(results)
-    return results
+    submission = Submission.objects.get(id=submission_id)
+
+    try:
+        with transaction.atomic():
+            for test in tests:
+                score = 0
+                test_input = test['test_input']
+                test_output = test['test_output']
+                test_input_base64 = encode_base64(test_input)
+            
+                code_base64, language_id , test_input_base64, test_output_base64 = encode_data_base64(code , language , test_input, test_output)
+                
+                token = run_code(code_base64 , language_id , test_input_base64, test_output_base64)
+            
+
+                result = get_result_by_token(token['token'])
+                retries = 0
+                while result['status']['description'] not in ['Accepted', 'Compilation Error', 'Runtime Error', 'Wrong Answer', 'Time Limit Exceeded']:
+                    if retries >= max_retries:
+                        result['status']['description'] = 'Timeout'
+                        break
+                    time.sleep(retry_delay)
+                    result = get_result_by_token(token['token'])
+                    retries += 1
+
+                if result['status']['description'] == 'Accepted':
+                    score = 100 // len(tests)
+                elif result['status']['description'] == 'Compilation Error':
+                    submission.status = 'Compilation Error'
+                    submission.save()
+                    return [{'test_id': test['id'], 'status': 'Compilation Error', 'score': 0}]
+                elif result['status']['description'] == 'Runtime Error':
+                    submission.status = 'Runtime Error'
+                    submission.save()
+                    return [{'test_id': test['id'], 'status': 'Runtime Error', 'score': 0}]
+                results.append({'test_id': test['id'], 'status': result['status']['description'], 'score': score})
+
+                SubmissionTest.objects.create(submission_id=submission_id, problem_test_id=test['id'], status=result['status']['description'], score=score)
+
+                total_score += score
+            submission.total_score = total_score
+            submission.status = 'Completed'
+            submission.save()
+
+
+        print(results)
+        return results
+    except Exception as e:
+        submission.status = 'Failed'
+        submission.save()
+        print(f"Error during submission processing: {e}")
+        return [{'error': str(e)}]
   
 
 def encode_base64(string):
