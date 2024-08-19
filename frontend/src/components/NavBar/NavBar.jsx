@@ -39,7 +39,7 @@ function NavBar({ username, isAuthorized }) {
       <Navbar data-bs-theme="dark" className="navbar-custom fixed-top">
         <Container>
           <Navbar.Brand as={Link} to="/">
-            PrepIt
+            DevPrep
           </Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link
@@ -79,11 +79,17 @@ function NavBar({ username, isAuthorized }) {
                   title={username}
                   menuVariant="dark"
                 >
-                  <NavDropdown.Item onClick={handleViewProfile}>
+                  <NavDropdown.Item
+                    onClick={handleViewProfile}
+                    className="custom-dropdown-item"
+                  >
                     View Profile
                   </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={handleLogout}>
+                  <NavDropdown.Divider className="custom-divider" />
+                  <NavDropdown.Item
+                    onClick={handleLogout}
+                    className="custom-dropdown-item"
+                  >
                     Log Out
                   </NavDropdown.Item>
                 </NavDropdown>

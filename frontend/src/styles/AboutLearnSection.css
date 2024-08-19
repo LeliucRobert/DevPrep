@@ -1,0 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
+.about-learning {
+  background-color: var(--primary-color);
+  /* background-color: #202025; */
+  height: 850px;
+  text-align: center;
+}

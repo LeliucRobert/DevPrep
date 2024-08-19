@@ -3,7 +3,7 @@ import api from "../../api";
 import Pagination from "react-bootstrap/Pagination";
 import LearnCard from "./LearnCard";
 
-const Lessons = ({ isAuthorized }) => {
+const Lessons = ({ isAuthorized, selectedLevels = [], sortType }) => {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -29,7 +29,9 @@ const Lessons = ({ isAuthorized }) => {
 
   const getAllLessons = async () => {
     try {
-      const response = await api.get("/api/lessons/");
+      const response = await api.get("/api/lessons/", {
+        skipAuth: true,
+      });
 
       return response.data;
     } catch (error) {
@@ -38,12 +40,31 @@ const Lessons = ({ isAuthorized }) => {
     }
   };
 
+  const filteredLessons = lessons.filter((lesson) => {
+    const matchesLevel =
+      selectedLevels.length === 0 || selectedLevels.includes(lesson.difficulty);
+    return matchesLevel;
+  });
+
+  const sortedLessons = [...filteredLessons].sort((a, b) => {
+    if (sortType === "level-asc") {
+      return a.difficulty > b.difficulty ? 1 : -1;
+    } else if (sortType === "level-desc") {
+      return a.difficulty < b.difficulty ? 1 : -1;
+    } else if (sortType === "newest") {
+      return a.created_at < b.created_at ? 1 : -1;
+    } else if (sortType === "oldest") {
+      return a.created_at > b.created_at ? 1 : -1;
+    }
+    return 0;
+  });
+
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 4;
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
 
-  const currentCards = lessons.slice(indexOfFirstCard, indexOfLastCard);
+  const currentCards = sortedLessons.slice(indexOfFirstCard, indexOfLastCard);
 
   const totalPages = Math.ceil(lessons.length / cardsPerPage);
 

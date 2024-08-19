@@ -1,6 +1,14 @@
 :root {
-  --primary-color: #acdbfb;
-  --secondary-color: #e50d73;
+  --primary-color: #ffffff;
+  /* --navbar-color: #14103a; */
+  --navbar-color: #202025;
+
   /* --secondary-color: #962E2A; */
-  --third-color: white;
+  --labels-color: white;
+  --secondary-color: #f5f5f5;
+
+  --buttons-color: #0d6efd;
+  /* --buttons-color: #3f3f32; */
+  --hero-section-bg-color: #28154b;
+  --hero-section-labels-color: #272323;
 }

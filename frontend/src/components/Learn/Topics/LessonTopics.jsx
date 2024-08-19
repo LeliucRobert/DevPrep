@@ -3,8 +3,11 @@ import { useState } from "react";
 import api from "../../../api";
 import Pagination from "react-bootstrap/Pagination";
 import LessonTopicCard from "./LessonTopicCard";
-
+import { useContext } from "react";
+import { AuthContext } from "../../../contexts/AuthContext";
 const LessonTopics = ({ lesson_id }) => {
+  const { isAuthorized } = useContext(AuthContext);
+
   const [topics, setTopics] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -22,7 +25,9 @@ const LessonTopics = ({ lesson_id }) => {
       }
     };
 
-    fetchData();
+    if (isAuthorized) {
+      fetchData();
+    }
   }, []);
 
   const [currentPage, setCurrentPage] = useState(1);

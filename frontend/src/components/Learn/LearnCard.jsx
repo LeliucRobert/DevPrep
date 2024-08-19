@@ -16,6 +16,7 @@ const LearnCard = ({ title, text, level, isAuthorized, lessonId }) => {
   const [loading, setLoading] = useState(true);
   const [topicsScores, setTopicsScores] = useState([]);
   const [score, setScore] = useState(0);
+
   const navigate = useNavigate();
 
   const handleStartLesson = () => {
@@ -44,8 +45,9 @@ const LearnCard = ({ title, text, level, isAuthorized, lessonId }) => {
         setLoading(false);
       }
     };
-
-    fetchTopics();
+    if (isAuthorized) {
+      fetchTopics();
+    }
   }, [lessonId]);
   return (
     <Card border="secondary" className="mb-3">

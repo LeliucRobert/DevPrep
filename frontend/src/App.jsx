@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import SolveProblems from "./pages/SolveProblems";
 import ProblemPage from "./pages/ProblemPage";
 import ScrollToTop from "./components/Utils/ScrollToTop";
+import "./styles/custom-bootstrap.css";
 function App() {
   return (
     <AuthProvider>

@@ -5,8 +5,25 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "../../styles/FilterBy.css";
 import DropdownDivider from "react-bootstrap/esm/DropdownDivider";
+import { useState } from "react";
 
-const FilterBy = ({ type, options }) => {
+const FilterBy = ({ type, options, onFilterChange }) => {
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const handleCheckboxChange = (option) => {
+    if (selectedOptions.includes(option)) {
+      setSelectedOptions(
+        selectedOptions.filter((selectedOption) => selectedOption !== option)
+      );
+    } else {
+      setSelectedOptions([...selectedOptions, option]);
+    }
+  };
+
+  const handleFilterClick = () => {
+    onFilterChange(selectedOptions);
+  };
+
   return (
     <DropdownButton id="dropdown-basic-button" title={type}>
       <Dropdown.ItemText>{type}</Dropdown.ItemText>
@@ -18,10 +35,12 @@ const FilterBy = ({ type, options }) => {
             type="checkbox"
             id={`checkbox-${index}`}
             label={option}
+            checked={selectedOptions.includes(option)}
+            onChange={() => handleCheckboxChange(option)}
           />
         ))}
 
-        <Button variant="secondary" size="sm">
+        <Button variant="secondary" size="sm" onClick={handleFilterClick}>
           Filter
         </Button>
       </Form>

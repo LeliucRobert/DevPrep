@@ -7,7 +7,7 @@ import NavBar from "../components/NavBar/NavBar";
 import { AuthContext } from "../contexts/AuthContext";
 import HeroSection from "../components/Home/HeroSection";
 import AboutLearnSection from "../components/Home/AboutLearnSection";
-import AboutInterviewSection from "../components/Home/AboutInterviewsSection";
+import AboutProblemsSection from "../components/Home/AboutProblemsSection";
 function Home() {
   // const { isAuthorized, username } = useContext(AuthContext);
   // return <NavBar username={username} isAuthorized={isAuthorized} />;
@@ -21,7 +21,7 @@ function Home() {
       <br />
       <br />
       <br />
-      <AboutInterviewSection />
+      <AboutProblemsSection />
     </>
   );
 }

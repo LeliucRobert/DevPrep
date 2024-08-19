@@ -10,6 +10,9 @@ import { Rating } from "primereact/rating";
 import { Badge } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
+
 const ProblemCard = ({
   id,
   title,
@@ -23,6 +26,7 @@ const ProblemCard = ({
   sample_input,
   sample_output,
   category,
+  isAuthorized,
 }) => {
   const [ratingValue, setRatingValue] = useState(0);
   const [score, setScore] = useState(0);
@@ -141,13 +145,27 @@ const ProblemCard = ({
             </Card.Text>
           </Col>
           <Col md={2} className="d-flex justify-content-end align-items-center">
-            <Button
-              variant="primary"
-              className="solve-button"
-              onClick={handleSolveProblem}
+            <OverlayTrigger
+              placement="top"
+              overlay={
+                <Tooltip id="button-tooltip">
+                  {!isAuthorized
+                    ? "You must be logged in to solve the problem."
+                    : "Solve the problem!"}
+                </Tooltip>
+              }
             >
-              Solve
-            </Button>
+              <span className="solve-button">
+                <Button
+                  variant="primary"
+                  onClick={handleSolveProblem}
+                  disabled={!isAuthorized}
+                  style={{ pointerEvents: !isAuthorized ? "none" : "auto" }} // Ensures the button does not trigger events when disabled
+                >
+                  Solve
+                </Button>
+              </span>
+            </OverlayTrigger>
           </Col>
         </Row>
         <Row className="mt-4">

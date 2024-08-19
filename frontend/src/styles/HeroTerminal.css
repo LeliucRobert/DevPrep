@@ -1,0 +1,86 @@
+.terminal-container {
+  margin-top: 50px;
+  margin-left: 65px;
+  background-color: #2d2e32;
+  color: #fff;
+  border: 2px solid #00bcd4;
+  border-radius: 10px;
+  /* width: 90%; */
+  width: 800px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.terminal-header {
+  padding: 10px;
+  display: flex;
+  justify-content: flex-start;
+  background-color: #1c1e22;
+
+  border-bottom: 2px solid #00bcd4;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.terminal-body {
+  font-family: "Courier New", Courier, monospace;
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.terminal-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.red {
+  background-color: #ff5f56;
+}
+
+.yellow {
+  background-color: #ffbd2e;
+}
+
+.green {
+  background-color: #27c93f;
+}
+
+.terminal-body {
+  padding: 20px;
+  line-height: 3.3;
+  height: 300px;
+}
+
+.highlight {
+  background-color: #444;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.terminal-footer {
+  padding: 20px;
+  background-color: #1c1e22;
+  border-top: 2px solid #00bcd4;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  text-align: center;
+}
+
+.cta-button {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #218838;
+}

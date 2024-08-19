@@ -3,7 +3,12 @@ import api from "../../api";
 import Pagination from "react-bootstrap/Pagination";
 import ProblemCard from "./ProblemCard";
 
-const Problems = ({ isAuthorized }) => {
+const Problems = ({
+  isAuthorized,
+  selectedLevels = [],
+  selectedCategories = [],
+  sortType,
+}) => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -25,7 +30,7 @@ const Problems = ({ isAuthorized }) => {
 
   const getAllProblems = async () => {
     try {
-      const response = await api.get("/api/problems/");
+      const response = await api.get("/api/problems/", { skipAuth: true });
       console.log(response.data);
       return response.data;
     } catch (error) {
@@ -34,12 +39,35 @@ const Problems = ({ isAuthorized }) => {
     }
   };
 
+  const filteredProblems = problems.filter((problem) => {
+    const matchesLevel =
+      selectedLevels.length === 0 ||
+      selectedLevels.includes(problem.difficulty);
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(problem.category);
+    return matchesLevel && matchesCategory;
+  });
+
+  const sortedProblems = [...filteredProblems].sort((a, b) => {
+    if (sortType === "level-asc") {
+      return a.difficulty > b.difficulty ? 1 : -1;
+    } else if (sortType === "level-desc") {
+      return a.difficulty < b.difficulty ? 1 : -1;
+    } else if (sortType === "newest") {
+      return a.created_at < b.created_at ? 1 : -1;
+    } else if (sortType === "oldest") {
+      return a.created_at > b.created_at ? 1 : -1;
+    }
+    return 0;
+  });
+
   const [currentPage, setCurrentPage] = useState(1);
   const cardsPerPage = 4;
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
 
-  const currentCards = problems.slice(indexOfFirstCard, indexOfLastCard);
+  const currentCards = sortedProblems.slice(indexOfFirstCard, indexOfLastCard);
 
   const totalPages = Math.ceil(problems.length / cardsPerPage);
 
@@ -85,6 +113,7 @@ const Problems = ({ isAuthorized }) => {
           sample_input={problems.sample_input}
           sample_output={problems.sample_output}
           category={problems.category}
+          isAuthorized={isAuthorized}
         />
       ))}
       <Pagination className="justify-content-center">

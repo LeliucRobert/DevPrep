@@ -3,30 +3,70 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "../../styles/HeroSection.css";
 import Button from "react-bootstrap/Button";
+import HeroTerminal from "./HeroTerminal";
+import Typewriter from "typewriter-effect";
 
 const HeroSection = () => {
   return (
-    <Row className="hero-row">
-      <Col className="hero-col">
-        <div className="hero-sitename"></div>
-        <span className="hero-title">
-          {" "}
-          Ace your Interviews and Master Problem Solving{" "}
-        </span>
-        <p className="hero-description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi ut
-          neque suscipit doloribus repellat est reiciendis necessitatibus,
-          pariatur reprehenderit ea quaerat rem autem aliquid at culpa, cumque
-          assumenda. Aliquam, error.
-        </p>
-        <Button variant="info" className="hero-button">
-          Get Started
-        </Button>{" "}
-      </Col>
-      <Col className="hero-col">
-        <img src="public/images/hero2.png" alt="" className="hero-img" />
-      </Col>
-    </Row>
+    <>
+      <Row className="hero-row1">
+        <Col className="hero-col">
+          <div className="hero-sitename">DevPrep</div>
+
+          <span className="hero-title">
+            {" "}
+            <Typewriter
+              options={{
+                strings: [
+                  "Ace your coding interviews",
+                  "Unlock Your Full Potential",
+                  "Conquer Your Next Milestone",
+                  "Empower Your Journey",
+                ],
+                autoStart: true,
+                loop: true,
+              }}
+            />{" "}
+          </span>
+          <div className="terminal-container">
+            <HeroTerminal />
+          </div>
+        </Col>
+        <Col className="hero-col">
+          <img
+            src="public/images/hero-interview.png"
+            alt=""
+            className="hero-img"
+          />
+        </Col>
+      </Row>
+      <Row className="hero-row2">
+        <Col lg="">
+          <img
+            src="public/images/hero-learning.png"
+            alt=""
+            className="hero-row2-images"
+          ></img>
+          <div className="hero-row2-text">Learning Phase</div>
+        </Col>
+        <Col lg="">
+          <img
+            src="public/images/hero-problem.png"
+            alt=""
+            className="hero-row2-images"
+          ></img>
+          <div className="hero-row2-text">Problem Solving</div>
+        </Col>
+        <Col lg="">
+          <img
+            src="public/images/hero-interview.png"
+            alt=""
+            className="hero-row2-images"
+          ></img>
+          <div className="hero-row2-text">Practicing Interviews</div>
+        </Col>
+      </Row>
+    </>
   );
 };
 

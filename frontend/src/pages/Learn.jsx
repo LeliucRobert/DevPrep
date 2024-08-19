@@ -12,6 +12,17 @@ import Lessons from "../components/Learn/Lessons";
 
 const Learn = () => {
   const { isAuthorized } = useContext(AuthContext);
+  const [selectedLevels, setSelectedLevels] = useState([]);
+  const [sortType, setSortType] = useState("oldest");
+
+  const handleLevelChange = (levels) => {
+    setSelectedLevels(levels);
+  };
+
+  const handleSortChange = (sortType) => {
+    setSortType(sortType);
+  };
+
   return (
     <div>
       <Row className="learn-row"></Row>
@@ -23,12 +34,16 @@ const Learn = () => {
               <div className="learn-title-header">
                 <h2 className="learn-title">Lessons</h2>
                 <div className="learn-actions">
-                  <FilterBy type="Level" options={["Hard", "Easy", "Medium"]} />
+                  <FilterBy
+                    type="Level"
+                    options={["Hard", "Easy", "Medium"]}
+                    onFilterChange={handleLevelChange}
+                  />
                   <FilterBy
                     type="Category"
                     options={["BKT", "BFS", "DFS", "Dijkstra"]}
                   />
-                  <SortBy />
+                  <SortBy onSortChange={handleSortChange} />
                 </div>
               </div>
             </div>
@@ -41,7 +56,11 @@ const Learn = () => {
       <Row>
         <Col lg="2"></Col>
         <Col>
-          <Lessons isAuthorized={isAuthorized} />
+          <Lessons
+            isAuthorized={isAuthorized}
+            selectedLevels={selectedLevels}
+            sortType={sortType}
+          />
         </Col>
         <Col lg="2"></Col>
       </Row>

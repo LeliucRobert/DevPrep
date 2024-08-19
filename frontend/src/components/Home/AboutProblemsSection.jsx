@@ -3,12 +3,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "../../styles/HeroSection.css";
 
-import "../../styles/AboutInterviewSection.css";
+import "../../styles/AboutProblemsSection.css";
 import Button from "react-bootstrap/Button";
 
 const AboutInterviewsSection = () => {
   return (
-    <Row className="hero-row">
+    <Row className="about-problems">
       <Col className="hero-col">
         <div className="hero-sitename"></div>
         <span className="hero-title"> Practice Mock Interviews </span>
