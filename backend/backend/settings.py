@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
+import dj_database_url
 import os
 
 load_dotenv()
@@ -28,10 +29,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = 'django-insecure-mlwlo_lm2^zq-*f41@t6bqzup@=!&5^c9x=0b1)(r3m0yc(_yh'
+SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-mlwlo_lm2^zq-*f41@t6bqzup@=!&5^c9x=0b1)(r3m0yc(_yh')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get("DEBUG" , 'True')== 'True'
 
 ALLOWED_HOSTS = ["*"]
 
@@ -98,12 +99,22 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if not DEBUG:
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
+else:    
+    DATABASES = {
+        'default': {
+            'ENGINE': os.environ.get("DB_ENGINE"),
+            'HOST': os.environ.get("DB_HOST"),
+            'NAME': os.environ.get("DB_NAME"),
+            'USER': os.environ.get("DB_USER"),
+            'PASSWORD': os.environ.get("DB_PASSWORD"),
+            'PORT': os.environ.get("DB_PORT"),
+
+
+        }
     }
-}
 
 
 # Password validation
