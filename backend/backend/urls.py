@@ -3,10 +3,9 @@ from django.contrib import admin
 from django.urls import path, include
 from api.views import CreateUserView, get_user_details
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from django.shortcuts import redirect
+
 
 urlpatterns = [
-    path('', lambda request: redirect('api/', permanent=True)),
     path('admin/', admin.site.urls),
     path('api/user/register/', CreateUserView.as_view(), name='register'),
     path('api/user/<int:user_id>/', get_user_details, name='get_user_details'),
