@@ -23,11 +23,7 @@ const AboutInterviewsSection = () => {
         </Button>{" "}
       </Col>
       <Col className="hero-col">
-        <img
-          src="public/images/aboutinterview1.png"
-          alt=""
-          className="hero-img"
-        />
+        <img src="images/aboutinterview1.png" alt="" className="hero-img" />
       </Col>
     </Row>
   );

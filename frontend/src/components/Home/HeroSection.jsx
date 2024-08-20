@@ -33,17 +33,13 @@ const HeroSection = () => {
           </div>
         </Col>
         <Col className="hero-col">
-          <img
-            src="public/images/hero-interview.png"
-            alt=""
-            className="hero-img"
-          />
+          <img src="images/hero-interview.png" alt="" className="hero-img" />
         </Col>
       </Row>
       <Row className="hero-row2">
         <Col lg="">
           <img
-            src="public/images/hero-learning.png"
+            src="images/hero-learning.png"
             alt=""
             className="hero-row2-images"
           ></img>
@@ -51,7 +47,7 @@ const HeroSection = () => {
         </Col>
         <Col lg="">
           <img
-            src="public/images/hero-problem.png"
+            src="images/hero-problem.png"
             alt=""
             className="hero-row2-images"
           ></img>
@@ -59,7 +55,7 @@ const HeroSection = () => {
         </Col>
         <Col lg="">
           <img
-            src="public/images/hero-interview.png"
+            src="images/hero-interview.png"
             alt=""
             className="hero-row2-images"
           ></img>

@@ -9,11 +9,7 @@ const AboutLearnSection = () => {
     <>
       <Row className="about-learning">
         <Col className="hero-col">
-          <img
-            src="public/images/aboutlearning1.png"
-            alt=""
-            className="hero-img"
-          />
+          <img src="aboutlearning1.png" alt="" className="hero-img" />
         </Col>
         <Col className="hero-col">
           <div className="hero-sitename"></div>
