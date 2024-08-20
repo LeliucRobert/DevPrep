@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.urls import path, include
 from api.views import CreateUserView, get_user_details
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.shortcuts import redirect
 
 urlpatterns = [
     path('', lambda request: redirect('api/', permanent=True)),
