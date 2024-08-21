@@ -1,12 +1,10 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
-import { useContext, useState } from "react";
+import Spinner from "react-bootstrap/Spinner";
 import api from "../../api";
 import { AuthContext } from "../../contexts/AuthContext";
-import Spinner from "react-bootstrap/Spinner";
 import "../../styles/ModalForm.css";
 
 function ModalForm({ show, handleClose, login, route }) {
@@ -48,8 +46,13 @@ function ModalForm({ show, handleClose, login, route }) {
     }
   };
 
+  const handleCloseButton = () => {
+    setAuthError("");
+    handleClose();
+  };
+
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleCloseButton}>
       <Modal.Header closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
@@ -59,12 +62,12 @@ function ModalForm({ show, handleClose, login, route }) {
             <Spinner animation="border" variant="primary" />
           </div>
         ) : (
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Username</Form.Label>
               <Form.Control
                 type="email"
-                placeholder="Enter email"
+                placeholder="Enter username"
                 onChange={(e) => setUsername(e.target.value)}
               />
             </Form.Group>
@@ -84,8 +87,6 @@ function ModalForm({ show, handleClose, login, route }) {
                     type="password"
                     placeholder="Confirm Password"
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    value={confirmPassword}
-                    required
                   />
                 </Form.Group>
               </>
@@ -97,7 +98,7 @@ function ModalForm({ show, handleClose, login, route }) {
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleCloseButton}>
           Close
         </Button>
         <Button variant="primary" onClick={handleSubmit}>
