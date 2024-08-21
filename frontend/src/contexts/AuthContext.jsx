@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }) => {
       setUsername(response.data.username);
       setIsAuthorized(true);
     } catch (error) {
-      console.error("Error fetching user details:", error.message);
       setIsAuthorized(false);
     }
   };

@@ -1,18 +1,17 @@
-import React, { useEffect } from "react";
-import { Alert } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import "../../styles/SolveProblems/ProblemCard.css";
-import { useState } from "react";
 import { Rating } from "primereact/rating";
-import { Badge } from "react-bootstrap";
+import { Badge, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-
+import Loading from "../Utils/Loading";
+import Error from "../Utils/Error";
 const ProblemCard = ({
   id,
   title,
@@ -30,6 +29,8 @@ const ProblemCard = ({
 }) => {
   const [ratingValue, setRatingValue] = useState(0);
   const [score, setScore] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSolveProblem = () => {
@@ -53,6 +54,7 @@ const ProblemCard = ({
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const [ratings, scores] = await Promise.all([
           getRatings(),
@@ -61,7 +63,12 @@ const ProblemCard = ({
         setRatingValue(ratings.rating);
         setScore(scores.score);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        setError(
+          error.response?.data?.message ||
+            "An unexpected error occurred. Please try again later!"
+        );
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -73,7 +80,10 @@ const ProblemCard = ({
 
       return response.data;
     } catch (error) {
-      console.error("Error fetching rating:", error);
+      setError(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again later!"
+      );
       return [];
     }
   };
@@ -83,7 +93,10 @@ const ProblemCard = ({
       const response = await api.get(`api/problems/${id}/userScore`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching user score:", error);
+      setError(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again later!"
+      );
       return [];
     }
   };
@@ -96,12 +109,20 @@ const ProblemCard = ({
       setRatingValue(event.value);
       return response.data;
     } catch (error) {
-      console.error("Error setting rating:", error);
-    } finally {
-      console.log("Rating set successfully");
+      setError(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again later!"
+      );
     }
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Error message={error} />;
+  }
   return (
     <Card className="mb-5">
       <Card.Header as="h5">

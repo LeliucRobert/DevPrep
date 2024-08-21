@@ -9,30 +9,33 @@ import ModalQuiz from "./Quiz/ModalQuiz";
 import api from "../../../api";
 import { confirmDialog } from "primereact/confirmdialog";
 import { useToast } from "../../../contexts/ToastContext";
+import Loading from "../../Utils/Loading";
+import Error from "../../Utils/Error";
 
-const LessonTopicCard = ({ initialStatus, topicId, topicContent }) => {
+const LessonTopicCard = ({ topicId, topicContent }) => {
   const [status, setStatus] = useState("Not Completed");
   const [showLesson, setShowLesson] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   const [loading, setLoading] = useState(true);
   const [quizScore, setQuizScore] = useState(0);
-
+  const [error, setError] = useState("");
   const showToast = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const response = await api.get(`api/topics/${topicId}/userScores/`);
 
         const topicsData = response.data;
         if (topicsData.length > 0) {
           setQuizScore(topicsData[0].quizScore);
-
-          console.log(topicsData[0].quizScore);
         }
-        setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        setError(
+          error.response?.data?.message ||
+            "An unexpected error occurred. Please try again later!"
+        );
       } finally {
         setLoading(false);
       }
@@ -102,6 +105,12 @@ const LessonTopicCard = ({ initialStatus, topicId, topicContent }) => {
     setShowQuiz(false);
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <Error message={error} />;
+  }
   return (
     <>
       <Card style={cardStyle}>

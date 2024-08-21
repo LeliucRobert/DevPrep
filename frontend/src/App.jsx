@@ -27,7 +27,7 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={AnimatedPage(Home)()} />
-        <Route path="/profile/:username" element={AnimatedPage(Profile)()} />
+        <Route path="/profile/:username" element={AnimatedPage(ComingSoon)()} />
         <Route path="/problems" element={AnimatedPage(SolveProblems)()} />
         <Route path="/learn" element={AnimatedPage(Learn)()} />
         <Route path="/learn/:title" element={AnimatedPage(LessonPage)()} />

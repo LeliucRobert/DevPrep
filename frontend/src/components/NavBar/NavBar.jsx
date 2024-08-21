@@ -96,12 +96,20 @@ function NavBar({ username, isAuthorized }) {
               </Navbar.Text>
             ) : (
               <>
-                <Button variant="dark" onClick={handleShowLogin}>
+                <Button
+                  variant="dark"
+                  onClick={handleShowLogin}
+                  className="button-login"
+                >
                   {" "}
                   Log in{" "}
                 </Button>
 
-                <Button variant="dark" onClick={handleShowRegister}>
+                <Button
+                  variant="dark"
+                  onClick={handleShowRegister}
+                  className="button-register"
+                >
                   {" "}
                   Register{" "}
                 </Button>

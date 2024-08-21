@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import api from "../../api";
 import Pagination from "react-bootstrap/Pagination";
 import ProblemCard from "./ProblemCard";
+import Loading from "../Utils/Loading";
+import Error from "../Utils/Error";
 
 const Problems = ({
   isAuthorized,
@@ -11,7 +13,7 @@ const Problems = ({
 }) => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +21,10 @@ const Problems = ({
         const problemsData = await getAllProblems();
         setProblems(problemsData);
       } catch (error) {
-        setError("Failed to fetch data.");
+        setError(
+          error.response?.data?.message ||
+            "An unexpected error occurred. Please try again later!"
+        );
       } finally {
         setLoading(false);
       }
@@ -31,10 +36,12 @@ const Problems = ({
   const getAllProblems = async () => {
     try {
       const response = await api.get("/api/problems/", { skipAuth: true });
-      console.log(response.data);
       return response.data;
     } catch (error) {
-      console.error("Error fetching lessons:", error.message);
+      setError(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again later!"
+      );
       return [];
     }
   };
@@ -96,6 +103,13 @@ const Problems = ({
     return items;
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <Error message={error} />;
+  }
   return (
     <>
       {currentCards.map((problems, index) => (

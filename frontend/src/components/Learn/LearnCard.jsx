@@ -10,13 +10,12 @@ import Alert from "react-bootstrap/Alert";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../api";
-
+import Loading from "../Utils/Loading";
+import Error from "../Utils/Error";
 const LearnCard = ({ title, text, level, isAuthorized, lessonId }) => {
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [topicsScores, setTopicsScores] = useState([]);
-  const [score, setScore] = useState(0);
-
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleStartLesson = () => {
@@ -25,12 +24,11 @@ const LearnCard = ({ title, text, level, isAuthorized, lessonId }) => {
 
   useEffect(() => {
     const fetchTopics = async () => {
+      setLoading(true);
       try {
         const response = await api.get(
           `api/lessons/${lessonId}/UserTopicScores`
         );
-
-        setTopicsScores(response.data);
 
         if (response.data.length > 0) {
           let count = 0;
@@ -40,7 +38,10 @@ const LearnCard = ({ title, text, level, isAuthorized, lessonId }) => {
           setProgress((count / response.data.length) * 100);
         }
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        setError(
+          error.response?.data?.message ||
+            "An unexpected error occurred. Please try again later!"
+        );
       } finally {
         setLoading(false);
       }
@@ -49,6 +50,10 @@ const LearnCard = ({ title, text, level, isAuthorized, lessonId }) => {
       fetchTopics();
     }
   }, [lessonId]);
+
+  if (error) {
+    return <Error message={error} />;
+  }
   return (
     <Card border="secondary" className="mb-3">
       <Card.Header as="h5" className="learn-card-header">

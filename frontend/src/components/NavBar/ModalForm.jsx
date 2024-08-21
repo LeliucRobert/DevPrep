@@ -13,17 +13,26 @@ function ModalForm({ show, handleClose, login, route }) {
   const title = login ? "Log In" : "Register";
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState("");
   const { login: loginContext } = useContext(AuthContext);
+
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
 
+    setAuthError("");
+
+    if (!login && password !== confirmPassword) {
+      setAuthError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await api.post(route, { username, password });
-      if (title === "Log In") {
-        // localStorage.setItem(ACCESS_TOKEN, res.data.access);
-        // localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+      if (login) {
         loginContext(res.data.access);
         handleClose();
       } else {
@@ -31,10 +40,11 @@ function ModalForm({ show, handleClose, login, route }) {
         handleClose();
       }
     } catch (error) {
-      alert(error);
+      setAuthError(error.response?.data?.detail || "An error occurred");
+      setLoading(false);
+      return;
     } finally {
       setLoading(false);
-      handleClose();
     }
   };
 
@@ -66,13 +76,22 @@ function ModalForm({ show, handleClose, login, route }) {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
-            {!login ? (
-              <Form.Group controlId="formBasicPassword">
-                <Form.Label>Confirm Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
-              </Form.Group>
-            ) : (
-              ""
+            {!login && (
+              <>
+                <Form.Group controlId="formBasicConfirmPassword">
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Confirm Password"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    value={confirmPassword}
+                    required
+                  />
+                </Form.Group>
+              </>
+            )}
+            {authError && (
+              <div style={{ color: "red", marginTop: "5px" }}>{authError}</div>
             )}
           </Form>
         )}

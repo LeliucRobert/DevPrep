@@ -40,3 +40,12 @@
   width: 180px;
   height: 180px;
 }
+
+.button-login {
+  margin-right: 10px;
+  background-color: var(--buttons-color);
+}
+
+.button-register {
+  background-color: var(--buttons-color);
+}

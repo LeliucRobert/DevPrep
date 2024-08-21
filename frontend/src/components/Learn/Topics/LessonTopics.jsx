@@ -1,25 +1,29 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import api from "../../../api";
 import Pagination from "react-bootstrap/Pagination";
 import LessonTopicCard from "./LessonTopicCard";
-import { useContext } from "react";
 import { AuthContext } from "../../../contexts/AuthContext";
+import Loading from "../../Utils/Loading";
+import Error from "../../Utils/Error";
+
 const LessonTopics = ({ lesson_id }) => {
   const { isAuthorized } = useContext(AuthContext);
 
   const [topics, setTopics] = useState([]);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await api.get(`api/lessons/${lesson_id}/topics/`);
         const topicsData = response.data;
-        setLoading(false);
+
         setTopics(topicsData);
       } catch (error) {
-        console.error("Error fetching data:", error.message);
+        setError(
+          error.response?.data?.message ||
+            "An unexpected error occurred. Please try again later!"
+        );
       } finally {
         setLoading(false);
       }
@@ -58,9 +62,11 @@ const LessonTopics = ({ lesson_id }) => {
   };
 
   if (loading) {
-    return <p>Loading quiz data...</p>; // Render loading message while data is being fetched
+    return <Loading />;
   }
-
+  if (error) {
+    return <Error message={error} />;
+  }
   return (
     <>
       {currentCards.map((topics, index) => (

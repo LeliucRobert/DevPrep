@@ -1,13 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Modal,
-  Button,
-  Container,
-  Carousel,
-  Row,
-  Col,
-  Spinner,
-} from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import Quiz from "./Quiz";
 import { useToast } from "../../../../contexts/ToastContext";
 import { confirmDialog } from "primereact/confirmdialog";

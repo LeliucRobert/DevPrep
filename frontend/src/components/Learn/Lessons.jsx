@@ -3,19 +3,22 @@ import api from "../../api";
 import Pagination from "react-bootstrap/Pagination";
 import LearnCard from "./LearnCard";
 import Loading from "../Utils/Loading";
+import Error from "../Utils/Error";
 const Lessons = ({ isAuthorized, selectedLevels = [], sortType }) => {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [lessonsData, scoresData] = await Promise.all([getAllLessons()]);
+        const lessonsData = await getAllLessons();
         setLessons(lessonsData);
-        setScores(scoresData);
       } catch (error) {
-        setError(true);
+        setError(
+          error.response?.data?.message ||
+            "An unexpected error occurred. Please try again later!"
+        );
       } finally {
         setLoading(false);
       }
@@ -91,6 +94,9 @@ const Lessons = ({ isAuthorized, selectedLevels = [], sortType }) => {
   };
   if (loading) {
     return <Loading />;
+  }
+  if (error) {
+    return <Error message={error} />;
   }
   return (
     <>

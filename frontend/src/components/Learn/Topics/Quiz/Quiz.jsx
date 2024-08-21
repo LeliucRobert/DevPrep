@@ -1,18 +1,12 @@
 import React from "react";
-import { PrimeReactProvider, PrimeReactContext } from "primereact/api";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "../../../../contexts/ToastContext";
 import { confirmDialog } from "primereact/confirmdialog";
 import { ListBox } from "primereact/listbox";
-import {
-  Carousel,
-  Container,
-  Spinner,
-  Button,
-  Row,
-  Col,
-} from "react-bootstrap";
+import { Carousel, Container, Button, Row, Col } from "react-bootstrap";
 import api from "../../../../api";
+import Loading from "../../../Utils/Loading";
+import Error from "../../../Utils/Error";
 const Quiz = ({ topicId, onFinish }) => {
   const [index, setIndex] = useState(0);
 
@@ -22,7 +16,7 @@ const Quiz = ({ topicId, onFinish }) => {
   const [selectedAnswers, setSelectedAnswers] = useState({});
 
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
 
   const getAnswersForAllQuestions = async (questions) => {
     try {
@@ -41,11 +35,11 @@ const Quiz = ({ topicId, onFinish }) => {
     setLoading(true);
 
     try {
-      const quiz = await api.get(`api/topics/${topicId}/quiz/`);
-      const quizData = quiz.data;
+      const response = await api.get(`api/topics/${topicId}/quiz/`);
+      const quizData = response.data;
 
       setQuiz(quizData);
-      if (quizData[0].id) {
+      if (quiz[0].id) {
         const questions = await api.get(
           `api/quiz/${quizData[0].id}/questions/`
         );
@@ -58,10 +52,13 @@ const Quiz = ({ topicId, onFinish }) => {
           setAnswers(allAnswers);
         }
       }
+
       setError(null);
     } catch (error) {
-      setError("Error fetching data");
-      console.error("Error fetching data:", error.message);
+      setError(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again later!"
+      );
       setQuiz([]);
       setQuestions([]);
       setAnswers([]);
@@ -75,9 +72,11 @@ const Quiz = ({ topicId, onFinish }) => {
       const response = await api.post(`api/topics/${topicId}/updateUserScore`, {
         quiz_score: results.quizScore,
       });
-      console.log("Quiz results posted successfully:", response.data);
     } catch (error) {
-      console.error("Error posting quiz results:", error.message);
+      setError(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again later!"
+      );
     }
   };
 
@@ -114,7 +113,7 @@ const Quiz = ({ topicId, onFinish }) => {
       const questionPoints = questions[i].weight;
       const noCorrectAnswers = questions[i].correct_answers;
       let userPoints = 0;
-      console.log(noCorrectAnswers);
+
       if (selectedAnswers[i]) {
         selectedAnswers[i].forEach((answer) => {
           if (answer.is_correct) {
@@ -122,7 +121,6 @@ const Quiz = ({ topicId, onFinish }) => {
           } else {
             userPoints -= (0.66 * questionPoints) / noCorrectAnswers;
           }
-          console.log(answer.is_correct);
         });
       }
 
@@ -131,7 +129,7 @@ const Quiz = ({ topicId, onFinish }) => {
 
       totalPoints += userPoints;
     }
-    console.log(totalPoints);
+
     return totalPoints;
   };
   const confirmFinishQuiz = () => {
@@ -156,6 +154,12 @@ const Quiz = ({ topicId, onFinish }) => {
     });
   };
 
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <Error message={error} />;
+  }
   return (
     <>
       <Container>
