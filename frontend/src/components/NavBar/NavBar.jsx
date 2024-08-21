@@ -39,7 +39,7 @@ function NavBar({ username, isAuthorized }) {
       <Navbar data-bs-theme="dark" className="navbar-custom fixed-top">
         <Container>
           <Navbar.Brand as={Link} to="/">
-            DevPrep
+            <img src="images/logo_text.png" className="logo-img" />
           </Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link

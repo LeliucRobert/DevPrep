@@ -11,7 +11,9 @@ const HeroSection = () => {
     <>
       <Row className="hero-row1">
         <Col className="hero-col">
-          <div className="hero-sitename">DevPrep</div>
+          <div className="hero-sitename">
+            <img src="images/logo.png" /> DevPrep
+          </div>
 
           <span className="hero-title">
             {" "}

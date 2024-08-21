@@ -34,3 +34,9 @@
 .custom-divider {
   background-color: #272323;
 }
+
+.logo-img {
+  margin-top: 4px;
+  width: 180px;
+  height: 180px;
+}

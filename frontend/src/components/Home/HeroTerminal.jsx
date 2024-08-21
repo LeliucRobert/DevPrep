@@ -13,28 +13,29 @@ const HeroTerminal = () => {
   };
   return (
     <>
-      <div class="terminal-header">
-        <div class="terminal-buttons">
-          <span class="terminal-button red"></span>
-          <span class="terminal-button yellow"></span>
-          <span class="terminal-button green"></span>
+      <div className="terminal-header">
+        <div className="terminal-buttons">
+          <span className="terminal-button red"></span>
+          <span className="terminal-button yellow"></span>
+          <span className="terminal-button green"></span>
         </div>
       </div>
-      <div class="terminal-body">
+      <div className="terminal-body">
         <p>
           &gt; Walk into your coding interviews feeling like you{" "}
-          <span class="highlight">own the room.</span>
+          <span className="highlight">own the room.</span>
         </p>
         <p>
-          Feel empowered to land your <span class="highlight">dream job</span>
+          Feel empowered to land your{" "}
+          <span className="highlight">dream job</span>
         </p>
         <p>Confidently answer any technical question.</p>
         <p>
-          Never bomb an <span class="highlight">interview</span> again.
+          Never bomb an <span className="highlight">interview</span> again.
         </p>
       </div>
-      <div class="terminal-footer">
-        <button class="cta-button" onClick={handleShowRegister}>
+      <div className="terminal-footer">
+        <button className="cta-button" onClick={handleShowRegister}>
           Create a Free Account for Full Access &rarr;
         </button>
       </div>

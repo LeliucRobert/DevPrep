@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../api";
 import Pagination from "react-bootstrap/Pagination";
 import LearnCard from "./LearnCard";
-
+import Loading from "../Utils/Loading";
 const Lessons = ({ isAuthorized, selectedLevels = [], sortType }) => {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,14 +11,11 @@ const Lessons = ({ isAuthorized, selectedLevels = [], sortType }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [lessonsData, scoresData] = await Promise.all([
-          getAllLessons(),
-          setLoading(false),
-        ]);
+        const [lessonsData, scoresData] = await Promise.all([getAllLessons()]);
         setLessons(lessonsData);
         setScores(scoresData);
       } catch (error) {
-        setError("Failed to fetch data.");
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -92,7 +89,9 @@ const Lessons = ({ isAuthorized, selectedLevels = [], sortType }) => {
     }
     return items;
   };
-
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <>
       {currentCards.map((lessons, index) => (
