@@ -103,6 +103,7 @@ const Lessons = ({ isAuthorized, selectedLevels = [], sortType }) => {
       {currentCards.map((lessons, index) => (
         <LearnCard
           key={index}
+          id={lessons.id}
           title={lessons.title}
           text={lessons.description}
           level={lessons.difficulty}

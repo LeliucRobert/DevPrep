@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import api from "../../api";
 import Loading from "../Utils/Loading";
 import Error from "../Utils/Error";
-const LearnCard = ({ title, text, level, isAuthorized, lessonId }) => {
+const LearnCard = ({ id, title, text, level, isAuthorized, lessonId }) => {
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -58,7 +58,7 @@ const LearnCard = ({ title, text, level, isAuthorized, lessonId }) => {
     <Card border="secondary" className="mb-3">
       <Card.Header as="h5" className="learn-card-header">
         <Col lg={2}>
-          <div className="me-3">Featured</div>
+          <div className="me-3">#{id}</div>
         </Col>
         <Col>
           {level === "Easy" ? (

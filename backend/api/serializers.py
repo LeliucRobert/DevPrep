@@ -21,7 +21,7 @@ class NoteSerializer(serializers.ModelSerializer):
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ["id" , "title" , "description" , "content" , "created_at", "difficulty"]
+        fields = ["id" , "title" , "description"  , "created_at", "difficulty"]
 
 class UserLessonScoreSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
