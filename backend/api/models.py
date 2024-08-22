@@ -19,7 +19,7 @@ class Lesson(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     difficulty = models.CharField(max_length=10, choices=[
         ('Easy', 'Easy'),
-        ('Eedium', 'Medium'),
+        ('Medium', 'Medium'),
         ('Hard', 'Hard')])
     def __str__(self):
         return self.title
