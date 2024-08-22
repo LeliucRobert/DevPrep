@@ -47,6 +47,7 @@ const ProblemCard = ({
       sample_input,
       sample_output,
       category,
+      isAuthorized,
     };
 
     navigate(`/problems/${encodeURIComponent(id)}`, { state: problemData });
@@ -56,12 +57,14 @@ const ProblemCard = ({
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [ratings, scores] = await Promise.all([
-          getRatings(),
-          getScores(),
-        ]);
-        setRatingValue(ratings.rating);
-        setScore(scores.score);
+        if (isAuthorized) {
+          const [ratings, scores] = await Promise.all([
+            getRatings(),
+            getScores(),
+          ]);
+          setRatingValue(ratings.rating);
+          setScore(scores.score);
+        }
       } catch (error) {
         setError(
           error.response?.data?.message ||
@@ -72,12 +75,11 @@ const ProblemCard = ({
       }
     };
     fetchData();
-  });
+  }, [id]);
 
   const getRatings = async () => {
     try {
       const response = await api.get(`api/problems/${id}/getRating`);
-
       return response.data;
     } catch (error) {
       setError(
@@ -102,17 +104,19 @@ const ProblemCard = ({
   };
 
   const ratingChange = async (event) => {
-    try {
-      const response = await api.post(`api/problems/${id}/setRating`, {
-        rating: event.value,
-      });
-      setRatingValue(event.value);
-      return response.data;
-    } catch (error) {
-      setError(
-        error.response?.data?.message ||
-          "An unexpected error occurred. Please try again later!"
-      );
+    if (isAuthorized) {
+      try {
+        const response = await api.post(`api/problems/${id}/setRating`, {
+          rating: event.value,
+        });
+        setRatingValue(event.value);
+        return response.data;
+      } catch (error) {
+        setError(
+          error.response?.data?.message ||
+            "An unexpected error occurred. Please try again later!"
+        );
+      }
     }
   };
 

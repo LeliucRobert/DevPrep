@@ -58,6 +58,7 @@ const ProblemPage = () => {
 
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
+  console.log(problemData);
   return (
     <>
       <Row className="learn-row"></Row>
@@ -97,7 +98,7 @@ const ProblemPage = () => {
           </Row>
           <div className="learn-divider mb-5"></div>
           <Row>
-            <Accordion defaultActiveKey="0">
+            <Accordion defaultActiveKey={null}>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Problem Submissions</Accordion.Header>
                 <Accordion.Body>
