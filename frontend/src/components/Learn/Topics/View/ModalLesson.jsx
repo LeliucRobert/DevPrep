@@ -8,7 +8,7 @@ const ModalLesson = ({ show, handleClose, content, title }) => {
       <Modal
         show={show}
         onHide={() => handleClose()}
-        dialogClassName="modal-90w"
+        dialogClassName="custom-modal-width"
         aria-labelledby="example-custom-modal-styling-title"
         size="lg"
       >

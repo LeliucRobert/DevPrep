@@ -26,42 +26,35 @@ const Quiz = ({ topicId, onFinish }) => {
       const answersResponses = await Promise.all(answersPromises);
       return answersResponses.map((response) => response.data);
     } catch (error) {
-      console.error("Error fetching answers:", error.message);
       return [];
     }
   };
 
   const fetchData = async () => {
     setLoading(true);
+    setError("");
 
     try {
       const response = await api.get(`api/topics/${topicId}/quiz/`);
       const quizData = response.data;
-
       setQuiz(quizData);
-      if (quiz[0].id) {
-        const questions = await api.get(
+
+      if (quizData.length > 0) {
+        const questionsResponse = await api.get(
           `api/quiz/${quizData[0].id}/questions/`
         );
-        const questionsData = questions.data;
-
+        const questionsData = questionsResponse.data;
         setQuestions(questionsData);
 
-        if (questionsData.length > 0) {
-          const allAnswers = await getAnswersForAllQuestions(questionsData);
-          setAnswers(allAnswers);
-        }
+        const allAnswers = await getAnswersForAllQuestions(questionsData);
+        setAnswers(allAnswers);
       }
-
-      setError(null);
     } catch (error) {
+      console.error("Error fetching data:", error.message);
       setError(
         error.response?.data?.message ||
           "An unexpected error occurred. Please try again later!"
       );
-      setQuiz([]);
-      setQuestions([]);
-      setAnswers([]);
     } finally {
       setLoading(false);
     }
