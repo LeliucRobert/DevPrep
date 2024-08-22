@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
+
 class Note(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
@@ -27,7 +28,8 @@ class Topic(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     completed_at = models.DateTimeField(auto_now_add=True)
-    content = models.TextField()
+    content = models.TextField(null=True, blank=True)
+
 
     def __str__(self):
         return f'Id: {self.id} | Title: {self.title}'

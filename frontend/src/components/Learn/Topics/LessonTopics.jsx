@@ -74,6 +74,7 @@ const LessonTopics = ({ lesson_id }) => {
           key={index}
           topicId={topics.id}
           topicContent={topics.content}
+          topicTitle={topics.title}
         />
       ))}
 

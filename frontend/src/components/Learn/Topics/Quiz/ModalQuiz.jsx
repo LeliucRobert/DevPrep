@@ -2,7 +2,7 @@ import { Modal } from "react-bootstrap";
 import Quiz from "./Quiz";
 import { useToast } from "../../../../contexts/ToastContext";
 import { confirmDialog } from "primereact/confirmdialog";
-const ModalQuiz = ({ show, handleClose, topicId }) => {
+const ModalQuiz = ({ show, handleClose, topicId, title }) => {
   const showToast = useToast();
 
   const dialogClose = () => {
@@ -31,7 +31,7 @@ const ModalQuiz = ({ show, handleClose, topicId }) => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="example-custom-modal-styling-title">
-            haha
+            {title}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

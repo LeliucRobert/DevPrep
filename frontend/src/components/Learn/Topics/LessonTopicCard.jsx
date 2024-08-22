@@ -12,7 +12,7 @@ import { useToast } from "../../../contexts/ToastContext";
 import Loading from "../../Utils/Loading";
 import Error from "../../Utils/Error";
 
-const LessonTopicCard = ({ topicId, topicContent }) => {
+const LessonTopicCard = ({ topicId, topicContent, topicTitle }) => {
   const [status, setStatus] = useState("Not Completed");
   const [showLesson, setShowLesson] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
@@ -117,7 +117,7 @@ const LessonTopicCard = ({ topicId, topicContent }) => {
         <Card.Body>
           <Row>
             <Col>
-              <Card.Title>Special title treatment</Card.Title>
+              <Card.Title>{topicTitle}</Card.Title>
             </Col>
             <Col lg="1" xs="3">
               <Button variant="primary" onClick={handleShowLesson}>
@@ -151,11 +151,13 @@ const LessonTopicCard = ({ topicId, topicContent }) => {
         show={showLesson}
         handleClose={handleCloseLesson}
         content={topicContent}
+        title={topicTitle}
       />
       <ModalQuiz
         show={showQuiz}
         handleClose={handleCloseQuiz}
         topicId={topicId}
+        title={topicTitle}
       />
     </>
   );

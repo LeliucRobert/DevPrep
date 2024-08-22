@@ -1,6 +1,11 @@
 from django.contrib import admin
 from .models import Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest, Submission, SubmissionTest, UserProblemScore, UserRatingProblem
-# Register your models here.
+from django_summernote.widgets import SummernoteWidget 
+from django.db import models
+class TopicAdmin(admin.ModelAdmin):
+    formfield_overrides = { 
+            models.TextField: {'widget': SummernoteWidget}, 
+     }
 
 class QuestionAdmin(admin.ModelAdmin):
     readonly_fields = ('weight',)  
@@ -17,12 +22,12 @@ class ProblemAdmin(admin.ModelAdmin):
 
 admin.site.register(Lesson)
 admin.site.register(UserLessonScore)
-admin.site.register(Topic)
+admin.site.register(Topic, TopicAdmin)
 admin.site.register(Quiz)
-admin.site.register(Question)
+admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer)
 admin.site.register(UserTopicStatus)
-admin.site.register(Problem)
+admin.site.register(Problem, ProblemAdmin)
 admin.site.register(ProblemTest)
 admin.site.register(Submission)
 admin.site.register(SubmissionTest)
