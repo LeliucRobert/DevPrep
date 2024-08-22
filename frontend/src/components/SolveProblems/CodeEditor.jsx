@@ -200,14 +200,14 @@ const CodeSubmissionForm = ({ problemId }) => {
 
                   {item.status === "Accepted" && (
                     <img
-                      src="/public/images/good.png"
+                      src="images/good.png"
                       alt="Accepted Icon"
                       className="icon-small"
                     />
                   )}
                   {item.status === "Wrong Answer" && (
                     <img
-                      src="/public/images/wrong.png"
+                      src="images/wrong.png"
                       alt="Wrong Answer Icon"
                       className="icon-small"
                     />
@@ -215,7 +215,7 @@ const CodeSubmissionForm = ({ problemId }) => {
                   {item.status !== "Accepted" &&
                     item.status !== "Wrong Answer" && (
                       <img
-                        src="/public/images/danger.png"
+                        src="images/danger.png"
                         alt="Default Icon"
                         className="icon-small"
                       />
