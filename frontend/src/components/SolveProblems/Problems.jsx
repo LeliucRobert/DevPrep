@@ -56,11 +56,21 @@ const Problems = ({
     return matchesLevel && matchesCategory;
   });
 
+  const difficultyLevels = {
+    Easy: 1,
+    Medium: 2,
+    Hard: 3,
+  };
+
   const sortedProblems = [...filteredProblems].sort((a, b) => {
     if (sortType === "level-asc") {
-      return a.difficulty > b.difficulty ? 1 : -1;
+      return difficultyLevels[a.difficulty] > difficultyLevels[b.difficulty]
+        ? 1
+        : -1;
     } else if (sortType === "level-desc") {
-      return a.difficulty < b.difficulty ? 1 : -1;
+      return difficultyLevels[a.difficulty] < difficultyLevels[b.difficulty]
+        ? 1
+        : -1;
     } else if (sortType === "newest") {
       return a.created_at < b.created_at ? 1 : -1;
     } else if (sortType === "oldest") {
