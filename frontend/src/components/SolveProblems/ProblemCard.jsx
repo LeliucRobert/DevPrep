@@ -120,21 +120,14 @@ const ProblemCard = ({
     }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (error) {
-    return <Error message={error} />;
-  }
   return (
     <Card className="mb-5">
       <Card.Header as="h5">
         <Row className="align-items-center">
-          <Col lg="1" className="d-flex align-items-center">
+          <Col lg="2" className="d-flex align-items-center">
             {title}
           </Col>
-          <Col lg="10" className="d-flex align-items-center">
+          <Col lg="9" className="d-flex align-items-center">
             <Alert variant="danger" className="idAlert mb-0">
               #{id}
             </Alert>
