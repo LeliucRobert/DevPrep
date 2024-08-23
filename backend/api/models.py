@@ -124,15 +124,15 @@ class Problem(models.Model):
         ('Medium', 'Medium'),
         ('Hard', 'Hard')])
     category = models.CharField(
-    max_length=10,
+    max_length=20,
     choices=[
-        ("dp", "Dynamic Programming"),
-        ("greedy", "Greedy"),
-        ("graph", "Graph"),
-        ("math", "Math"),
-        ("string", "String"),
-        ("tree", "Tree"),
-        ("other", "Other")
+        ("Dynamic Programming", "Dynamic Programming"),
+        ("Greedy", "Greedy"),
+        ("Graph", "Graph"),
+        ("Math", "Math"),
+        ("String", "String"),
+        ("Tree", "Tree"),
+        ("Elementary", "Elementary")
     ]
     )
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)

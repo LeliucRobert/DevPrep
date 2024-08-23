@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest, Submission, SubmissionTest, UserProblemScore, UserRatingProblem
+from .models import User, Lesson, UserLessonScore, Topic, Quiz, Question, Answer, UserTopicStatus, Problem, ProblemTest, Submission, SubmissionTest, UserProblemScore, UserRatingProblem
 from django_summernote.widgets import SummernoteWidget 
 from django.db import models
 class TopicAdmin(admin.ModelAdmin):
