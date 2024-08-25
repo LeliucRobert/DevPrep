@@ -7,6 +7,11 @@ class TopicAdmin(admin.ModelAdmin):
             models.TextField: {'widget': SummernoteWidget}, 
      }
 
+class ProblemAdmin(admin.ModelAdmin):
+    formfield_overrides = { 
+            models.TextField: {'widget': SummernoteWidget}, 
+     }
+
 class QuestionAdmin(admin.ModelAdmin):
     readonly_fields = ('weight',)  
     list_display = ('id', 'quiz', 'question', 'weight', 'correct_answers') 
@@ -27,7 +32,7 @@ admin.site.register(Quiz)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer)
 admin.site.register(UserTopicStatus)
-admin.site.register(Problem)
+admin.site.register(Problem, ProblemAdmin)
 admin.site.register(ProblemTest)
 admin.site.register(Submission)
 admin.site.register(SubmissionTest)

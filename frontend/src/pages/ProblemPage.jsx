@@ -218,30 +218,35 @@ const ProblemPage = () => {
           <Row className="problem-constraints">
             <Col>
               <strong>Constraints:</strong>{" "}
-              <div>
-                <ul>
-                  <li>
-                    <code>{problemData.restrictions}</code>
-                  </li>
-                </ul>
-              </div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: problemData.restrictions,
+                }}
+              />
             </Col>
           </Row>
           <Row className="problem-example">
             <Col>
               <strong>Example:</strong>
-
+              <div className="mt-4">
+                <strong>Input:</strong>
+              </div>
               <div className="problem-example-input">
-                <code>
-                  Input:
-                  {problemData.sample_input}
-                </code>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: problemData.sample_input,
+                  }}
+                />
+              </div>
+              <div className="mt-4">
+                <strong>Output:</strong>
               </div>
               <div className="problem-example-output">
-                <code>
-                  Output:
-                  {problemData.sample_output}
-                </code>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: problemData.sample_output,
+                  }}
+                />
               </div>
             </Col>
           </Row>

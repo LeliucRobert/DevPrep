@@ -106,7 +106,9 @@
 }
 
 .progress-bar {
-  background-color: var(--buttons-color);
+  /* background-color: var(--buttons-color); */
+  background-color: rgb(44, 43, 105);
+
   border-radius: 0.25rem;
 }
 

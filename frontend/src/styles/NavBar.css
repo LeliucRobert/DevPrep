@@ -1,34 +1,31 @@
 @import "./Colors.css";
 
 .navbar-custom {
-  height: 70px; /* Fixed height */
-  font-size: 1rem; /* Increase font size */
+  height: 70px;
+  font-size: 1rem;
   background-color: var(--navbar-color);
 }
 
 .navbar-custom .nav-link-custom {
-  /* color: black !important;  */
   font-weight: 600px;
 }
 
 .navbar-custom .nav-link-custom:hover {
-  color: var(
-    --labels-color
-  ) !important; /* Change this to your desired hover color */
+  color: var(--labels-color) !important;
 }
 
 .navbar-custom .nav-link-active {
-  color: var(--labels-color) !important; /* Active link color */
+  color: var(--labels-color) !important;
 }
 
 .custom-dropdown-item {
-  color: #272323 !important; /* Set text color to grey */
-  background-color: transparent !important; /* Ensure the background is transparent */
+  color: #272323 !important;
+  background-color: transparent !important;
 }
 
 .custom-dropdown-item:hover {
-  color: white !important; /* Optional: Change color on hover */
-  background-color: #272323 !important; /* Optional: Change background on hover */
+  color: white !important;
+  background-color: #272323 !important;
 }
 
 .custom-divider {

@@ -47,7 +47,6 @@ const Learn = () => {
                 </div>
               </div>
             </div>
-
             <div className="learn-divider"></div>
           </Col>
         </Col>

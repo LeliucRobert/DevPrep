@@ -4,23 +4,33 @@ import Col from "react-bootstrap/Col";
 import "../../styles/HeroSection.css";
 import "../../styles/AboutLearnSection.css";
 import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
+
 const AboutLearnSection = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/learn");
+  };
   return (
     <>
       <Row className="about-learning">
         <Col className="hero-col">
-          <img src="images/aboutlearning1.png" alt="" className="hero-img" />
+          <img src="images/heroo11.png" alt="" className="hero-img" />
         </Col>
         <Col className="hero-col">
           <div className="hero-sitename"></div>
           <span className="hero-title"> Start Your Learning Journey </span>
           <p className="hero-description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi
-            ut neque suscipit doloribus repellat est reiciendis necessitatibus,
-            pariatur reprehenderit ea quaerat rem autem aliquid at culpa, cumque
-            assumenda. Aliquam, error.
+            Explore Topics Delve into a wide range of subjects, from
+            foundational concepts to advanced techniques, all designed to build
+            your knowledge and confidence.
           </p>
-          <Button variant="info" className="hero-button">
+          <Button
+            variant="info"
+            className="hero-button"
+            onClick={handleNavigate}
+          >
             Start Learning
           </Button>{" "}
         </Col>

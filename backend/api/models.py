@@ -112,8 +112,8 @@ class UserLessonScore(models.Model):
 
 class Problem(models.Model):
     title = models.CharField(max_length=100)
-    card_description = models.TextField()
-    description = models.TextField()
+    card_description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     input_description = models.TextField()
     output_description = models.TextField()
     restrictions = models.TextField()

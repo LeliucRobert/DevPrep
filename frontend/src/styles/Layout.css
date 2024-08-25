@@ -1,10 +1,9 @@
-/* layoutStyles.css */
 .main-container {
-  margin: 2rem auto; /* Add margins to center the content */
-  padding: 2rem; /* Add padding inside the container */
-  max-width: 800px; /* Set a maximum width for the main content */
-  border: 1px solid #ccc; /* Add a border around the main content */
-  border-radius: 8px; /* Optional: add rounded corners */
-  background-color: #fff; /* Optional: set a background color */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add a box shadow */
+  margin: 2rem auto;
+  padding: 2rem;
+  max-width: 800px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

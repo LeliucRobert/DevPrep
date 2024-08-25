@@ -2,7 +2,18 @@
 
 .about-learning {
   background-color: var(--primary-color);
-  /* background-color: #202025; */
   height: 850px;
   text-align: center;
+}
+
+.hero-img {
+  width: 100%;
+  border: 5px solid #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.7);
+  transition: box-shadow 0.3s ease;
+}
+
+.hero-img:hover {
+  box-shadow: 0 0 30px rgba(0, 123, 255, 1);
 }

@@ -38,10 +38,10 @@ const HeroSection = () => {
             <div class="container">
               <div class="hero-content">
                 <div class="hero-image-1">
-                  <img src="images/hero-learning.png" alt="First Image" />
+                  <img src="images/heroo11.png" alt="First Image" />
                 </div>
                 <div class="hero-image-2">
-                  <img src="images/hero-problem.png" alt="Second Image" />
+                  <img src="images/heroo22.png" alt="Second Image" />
                 </div>
               </div>
             </div>

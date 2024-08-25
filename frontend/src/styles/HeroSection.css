@@ -1,14 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 
 .hero-row1 {
-  /* background-color: var(--hero-section-bg-color); */
   background-color: var(--primary-color);
   height: 1000px;
   text-align: center;
 }
 
 .hero-row2 {
-  /* background-color: rgb(227, 233, 231); */
+  background-color: rgb(227, 233, 231);
   background-color: #363638;
 
   height: 450px;
@@ -26,7 +25,6 @@
   font-size: 1.5rem;
   font-weight: 800;
   color: white;
-  /* color: var(--hero-serction-labels-color); */
 }
 
 .hero-col {
@@ -64,7 +62,6 @@
   margin-top: 35px;
   font-size: 1.5rem;
   color: var(--hero-serction-labels-color);
-  /* color: white; */
 }
 
 .hero-button {
@@ -87,7 +84,6 @@
 }
 
 .hero {
-  /* background-color: #181818; Or whatever background color you need */
   padding: 50px 0;
 }
 
@@ -101,19 +97,31 @@
 .hero-image-1 {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 50%;
+  left: -1vw;
+  max-width: 44vw;
   z-index: 1;
   transform: rotate(-10deg);
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.7);
+  border-radius: 25px;
+  transition: box-shadow 0.3s ease;
+}
+
+.hero-image-1:hover {
+  box-shadow: 0 0 30px rgba(0, 123, 255, 1);
 }
 
 .hero-image-2 {
   position: relative;
-  width: 70%;
+  max-width: 42vw;
+  left: 2.5vw;
   z-index: 2;
-  transform: rotate(10deg);
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(0, 123, 255, 0.7);
+  border-radius: 25px;
+  transition: box-shadow 0.3s ease;
+}
+
+.hero-image-2:hover {
+  box-shadow: 0 0 30px rgba(0, 123, 255, 1);
 }
 
 .hero-image-1 img,
