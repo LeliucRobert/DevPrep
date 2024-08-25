@@ -48,9 +48,11 @@ const Quiz = ({ topicId, onFinish }) => {
         const questionsData = questionsResponse.data;
         setLowestQuestionId(questionsData[0].id);
         setQuestions(questionsData);
-
+        console.log(questionsData);
+        console.log(lowestQuestionId);
         const allAnswers = await getAnswersForAllQuestions(questionsData);
         setAnswers(allAnswers);
+        console.log(allAnswers);
       }
     } catch (error) {
       setError(
@@ -180,15 +182,29 @@ const Quiz = ({ topicId, onFinish }) => {
                     <ListBox
                       multiple
                       value={
-                        selectedAnswers[question.id % lowestQuestionId] || []
+                        selectedAnswers[
+                          lowestQuestionId !== 1
+                            ? question.id % lowestQuestionId
+                            : question.id - 1
+                        ] || []
                       }
                       onChange={(e) =>
                         handleAnswerChange(
-                          [question.id % lowestQuestionId],
+                          [
+                            lowestQuestionId !== 1
+                              ? question.id % lowestQuestionId
+                              : question.id - 1,
+                          ],
                           e.value
                         )
                       }
-                      options={answers[question.id % lowestQuestionId]}
+                      options={
+                        answers[
+                          lowestQuestionId !== 1
+                            ? question.id % lowestQuestionId
+                            : question.id - 1
+                        ]
+                      }
                       optionLabel="answer"
                       className="w-full md:w-14rem"
                     />

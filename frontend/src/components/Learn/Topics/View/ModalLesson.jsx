@@ -18,11 +18,13 @@ const ModalLesson = ({ show, handleClose, content, title }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: content,
-            }}
-          />
+          <div style={{ maxWidth: "100%", overflowX: "auto" }}>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: content,
+              }}
+            />
+          </div>
         </Modal.Body>
       </Modal>
     </>
