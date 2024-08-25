@@ -46,7 +46,6 @@ const CodeSubmissionForm = ({ problemId }) => {
       );
 
       const submissionId = postResponse.data.submission_id;
-      console.log(`Submission ID: ${submissionId}`);
 
       let pollResponse;
       let isCompleted = false;
@@ -57,7 +56,6 @@ const CodeSubmissionForm = ({ problemId }) => {
         await sleep(2000);
 
         pollResponse = await api.get(`api/submissions/${submissionId}/results`);
-        console.log(pollResponse.data);
 
         if (pollResponse.data.status === "Completed") {
           isCompleted = true;
@@ -74,12 +72,11 @@ const CodeSubmissionForm = ({ problemId }) => {
 
         attempts += 1;
       }
-
-      if (!isCompleted) {
-        console.error("Failed to retrieve submission results in time.");
-      }
     } catch (error) {
-      console.error("Error during submission process:", error);
+      setErrorMessages(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again later!"
+      );
     } finally {
       setLoading(false);
     }

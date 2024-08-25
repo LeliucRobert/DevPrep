@@ -48,10 +48,13 @@ const LessonTopicCard = ({ topicId, topicContent, topicTitle }) => {
       const response = await api.delete(
         `api/topics/${topicId}/deleteUserScore`
       );
-      console.log(response);
+
       setQuizScore(0);
     } catch (error) {
-      console.error("Error deleting data:", error.message);
+      setError(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again later!"
+      );
     }
   };
 

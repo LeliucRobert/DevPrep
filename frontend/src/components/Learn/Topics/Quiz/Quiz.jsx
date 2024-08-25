@@ -14,7 +14,7 @@ const Quiz = ({ topicId, onFinish }) => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [selectedAnswers, setSelectedAnswers] = useState({});
-
+  const [lowestQuestionId, setLowestQuestionId] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -37,20 +37,22 @@ const Quiz = ({ topicId, onFinish }) => {
     try {
       const response = await api.get(`api/topics/${topicId}/quiz/`);
       const quizData = response.data;
+
       setQuiz(quizData);
 
       if (quizData.length > 0) {
         const questionsResponse = await api.get(
           `api/quiz/${quizData[0].id}/questions/`
         );
+
         const questionsData = questionsResponse.data;
+        setLowestQuestionId(questionsData[0].id);
         setQuestions(questionsData);
 
         const allAnswers = await getAnswersForAllQuestions(questionsData);
         setAnswers(allAnswers);
       }
     } catch (error) {
-      console.error("Error fetching data:", error.message);
       setError(
         error.response?.data?.message ||
           "An unexpected error occurred. Please try again later!"
@@ -149,9 +151,8 @@ const Quiz = ({ topicId, onFinish }) => {
 
   if (loading) {
     return <Loading />;
-  } else {
-    console.log(answers);
   }
+
   if (error) {
     return <Error message={error} />;
   }
@@ -179,25 +180,15 @@ const Quiz = ({ topicId, onFinish }) => {
                     <ListBox
                       multiple
                       value={
-                        selectedAnswers[
-                          (question.id % 4) - 1 >= 0 ? (question.id % 4) - 1 : 3
-                        ] || []
+                        selectedAnswers[question.id % lowestQuestionId] || []
                       }
                       onChange={(e) =>
                         handleAnswerChange(
-                          [
-                            (question.id % 4) - 1 >= 0
-                              ? (question.id % 4) - 1
-                              : 3,
-                          ],
+                          [question.id % lowestQuestionId],
                           e.value
                         )
                       }
-                      options={
-                        answers[
-                          (question.id % 4) - 1 >= 0 ? (question.id % 4) - 1 : 3
-                        ]
-                      }
+                      options={answers[question.id % lowestQuestionId]}
                       optionLabel="answer"
                       className="w-full md:w-14rem"
                     />
