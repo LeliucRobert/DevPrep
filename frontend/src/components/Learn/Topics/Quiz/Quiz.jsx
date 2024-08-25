@@ -149,6 +149,8 @@ const Quiz = ({ topicId, onFinish }) => {
 
   if (loading) {
     return <Loading />;
+  } else {
+    console.log(answers);
   }
   if (error) {
     return <Error message={error} />;
@@ -176,11 +178,26 @@ const Quiz = ({ topicId, onFinish }) => {
                   <Col lg="6" className="mx-auto">
                     <ListBox
                       multiple
-                      value={selectedAnswers[question.id - 1] || []}
-                      onChange={(e) =>
-                        handleAnswerChange(question.id - 1, e.value)
+                      value={
+                        selectedAnswers[
+                          (question.id % 4) - 1 >= 0 ? (question.id % 4) - 1 : 3
+                        ] || []
                       }
-                      options={answers[question.id - 1]}
+                      onChange={(e) =>
+                        handleAnswerChange(
+                          [
+                            (question.id % 4) - 1 >= 0
+                              ? (question.id % 4) - 1
+                              : 3,
+                          ],
+                          e.value
+                        )
+                      }
+                      options={
+                        answers[
+                          (question.id % 4) - 1 >= 0 ? (question.id % 4) - 1 : 3
+                        ]
+                      }
                       optionLabel="answer"
                       className="w-full md:w-14rem"
                     />

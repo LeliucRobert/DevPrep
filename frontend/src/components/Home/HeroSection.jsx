@@ -34,7 +34,18 @@ const HeroSection = () => {
           </div>
         </Col>
         <Col className="hero-col">
-          <img src="images/hero-interview.png" alt="" className="hero-img" />
+          <section class="hero">
+            <div class="container">
+              <div class="hero-content">
+                <div class="hero-image-1">
+                  <img src="images/hero-learning.png" alt="First Image" />
+                </div>
+                <div class="hero-image-2">
+                  <img src="images/hero-problem.png" alt="Second Image" />
+                </div>
+              </div>
+            </div>
+          </section>
         </Col>
       </Row>
       <Row className="hero-row2">
